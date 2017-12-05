@@ -6,6 +6,8 @@
 package Beans;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *
@@ -13,7 +15,5 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class MainBean implements MainBeanRemote {
-
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
+    @PersistenceContext private EntityManager em;
 }
