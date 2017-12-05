@@ -12,9 +12,10 @@ CREATE TABLE gebruikers (
 );
 
 CREATE TABLE groepsindeling (
-	indeling_id int,
+        id int NOT NULL AUTO_INCREMENT,
+	groepnummer int,
 	gebruiker_id varchar(20),
-	PRIMARY KEY(indeling_id),
+	PRIMARY KEY(id),
 	FOREIGN KEY(gebruiker_id) REFERENCES gebruikers(gebruiker_id)
 	
 );
@@ -37,6 +38,6 @@ INSERT INTO groepen VALUES ('111','student');
 INSERT INTO groepen VALUES ('222','student');
 INSERT INTO groepen VALUES ('999','docent');
 
-INSERT INTO groepsindeling VALUES (1,'111');
-INSERT INTO groepsindeling VALUES (1,'222');
-INSERT INTO groepsindeling VALUES (1,'333');
+INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'111');
+INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'222');
+INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'333');
