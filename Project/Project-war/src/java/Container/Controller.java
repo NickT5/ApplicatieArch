@@ -5,13 +5,19 @@
  */
 package Container;
 
+import Beans.MainBeanRemote;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Principal;
+import java.util.Iterator;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -28,17 +34,27 @@ public class Controller extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    
+    @EJB private MainBeanRemote mb;
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            HttpSession session = request.getSession();
+            String id = request.getUserPrincipal().getName();   //Naam van de principal (gebruiker) is de ID.
+            String voornaam = mb.getVoornaamById(id);           //Voornaam van ingelogd persoon
+            session.setAttribute("voornaam", voornaam);
+            
             if(request.isUserInRole("student")){
-                System.out.println("Student");
+                System.out.println("DEBUG: Dit is een Student");
                 gotoPage("menu.jsp",request,response);
             }
             if(request.isUserInRole("docent")){
-                System.out.println("Docent");
+                System.out.println("DEBUG: Dit is een Docent");  
+                session.setAttribute("aantalGroepen", mb.getAantalGroepen());
+                session.setAttribute("groepsIndeling", mb.getGroepen());
                 gotoPage("groepsIndeling.jsp",request,response);
             }
         }
