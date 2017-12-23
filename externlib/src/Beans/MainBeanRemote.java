@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +14,7 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface MainBeanRemote {
-    
+    public String getVoornaamById(String id);
+    public List getGroepen();
+    public List<Integer> getAantalGroepen();
 }
