@@ -12,10 +12,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Login</title>
+        <!--<link href="css/login.css" rel="stylesheet" type="text/css">-->
+        <style>
+            h1{
+                color:red;
+                text-align:center;
+            }
+            body{
+                background-color:#ff6347;
+            }
+        </style>
     </head>
     <body>
         <h1>Welkom</h1>
-        <p> Log je hier in voor de les Applicatie-Architecuren:
+        <p> Log je hier in voor de les Applicatie-Architecuren:</p>
         <form method=post action="j_security_check">
             <table>
                 <tr> <td> Naam: </td> <td> <input type="text" name="j_username" /></td></tr>
