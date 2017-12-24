@@ -6,6 +6,7 @@
 package Beans;
 
 import java.util.*;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,14 +29,41 @@ public class MainBean implements MainBeanRemote {
           
         return ids_studenten;
     }
-    
-    public String getStudentVoornaamById(String id)
+        
+    @Override
+    public List getGroepen()
     {
-        //TODO
-        Gebruikers gebruiker = (Gebruikers) em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult();
-        String vn = gebruiker.getVoornaam();
-        System.out.println("MAINBEAN VN: "+ vn);
-        return vn;
+        return em.createNamedQuery("Groepsindeling.findAll").getResultList();
     }
     
+    @Override
+    public List<Integer> getAantalGroepen()
+    {
+        return em.createNamedQuery("Groepsindeling.aantalGroepen").getResultList();
+    }
+    
+    /**
+     *
+     * @param id
+     * @return Voornaam van gebruiker
+     */
+    @Override
+    public String getVoornaamById(String id)
+    {
+        Gebruikers g = (Gebruikers) em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult(); 
+        String voornaam = g.getVoornaam();
+        return voornaam;
+    }
+
+    @Override
+    public void test()
+    {
+        
+    }
+    
+    @Override
+    public void hoi()
+    {
+        
+    }
 }

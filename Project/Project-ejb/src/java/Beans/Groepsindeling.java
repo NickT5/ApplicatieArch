@@ -9,13 +9,14 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -27,15 +28,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Groepsindeling.findAll", query = "SELECT g FROM Groepsindeling g")
-    , @NamedQuery(name = "Groepsindeling.findByIndelingId", query = "SELECT g FROM Groepsindeling g WHERE g.indelingId = :indelingId")})
+    , @NamedQuery(name = "Groepsindeling.aantalGroepen", query = "SELECT g.groepnummer FROM Groepsindeling g GROUP BY g.groepnummer")
+    , @NamedQuery(name = "Groepsindeling.findById", query = "SELECT g FROM Groepsindeling g WHERE g.id = :id")
+    , @NamedQuery(name = "Groepsindeling.findByGroepnummer", query = "SELECT g FROM Groepsindeling g WHERE g.groepnummer = :groepnummer")})
 public class Groepsindeling implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "indeling_id")
-    private Integer indelingId;
+    @Column(name = "id")
+    private Integer id;
+    @Column(name = "groepnummer")
+    private Integer groepnummer;
     @JoinColumn(name = "gebruiker_id", referencedColumnName = "gebruiker_id")
     @ManyToOne
     private Gebruikers gebruikerId;
@@ -43,16 +48,24 @@ public class Groepsindeling implements Serializable {
     public Groepsindeling() {
     }
 
-    public Groepsindeling(Integer indelingId) {
-        this.indelingId = indelingId;
+    public Groepsindeling(Integer id) {
+        this.id = id;
     }
 
-    public Integer getIndelingId() {
-        return indelingId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setIndelingId(Integer indelingId) {
-        this.indelingId = indelingId;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Integer getGroepnummer() {
+        return groepnummer;
+    }
+
+    public void setGroepnummer(Integer groepnummer) {
+        this.groepnummer = groepnummer;
     }
 
     public Gebruikers getGebruikerId() {
@@ -66,7 +79,7 @@ public class Groepsindeling implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (indelingId != null ? indelingId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -77,7 +90,7 @@ public class Groepsindeling implements Serializable {
             return false;
         }
         Groepsindeling other = (Groepsindeling) object;
-        if ((this.indelingId == null && other.indelingId != null) || (this.indelingId != null && !this.indelingId.equals(other.indelingId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -85,7 +98,7 @@ public class Groepsindeling implements Serializable {
 
     @Override
     public String toString() {
-        return "Beans.Groepsindeling[ indelingId=" + indelingId + " ]";
+        return "Beans.Groepsindeling[ id=" + id + " ]";
     }
     
 }

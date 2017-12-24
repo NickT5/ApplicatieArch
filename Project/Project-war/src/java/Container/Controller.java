@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.jasper.tagplugins.jstl.ForEach;
 
 //<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -47,6 +48,11 @@ public class Controller extends HttpServlet {
             
             System.out.println("CONTROLLER");
         
+            HttpSession session = request.getSession();
+            String id = request.getUserPrincipal().getName();   //Naam van de principal (gebruiker) is de ID.
+            String voornaam = mb.getVoornaamById(id);           //Voornaam van ingelogd persoon
+            session.setAttribute("voornaam", voornaam);
+            
             if(request.isUserInRole("student")){
                 System.out.println("Student");
                 
@@ -64,18 +70,22 @@ public class Controller extends HttpServlet {
                         //Get all namen by id's van tabel gebruikers.                      
                         Groepen gr = lijstIds_van_studenten.get(i);
                         Gebruikers g = gr.getGebruikers();
-                        String id = g.getGebruikerId();
-                        System.out.println("ID: " + id);
-                        String voornaam = mb.getStudentVoornaamById(id);
-                        System.out.println("VOORNAAM: " + voornaam);
+                        String id2 = g.getGebruikerId();
+                        System.out.println("ID: " + id2);
+                        String voornaam2 = mb.getVoornaamById(id2);
+                        System.out.println("VOORNAAM: " + voornaam2);
                     }
                     
                 }
                 
+                System.out.println("DEBUG: Dit is een Student");
                 gotoPage("menu.jsp",request,response);
             }
             if(request.isUserInRole("docent")){
-                System.out.println("Docent");
+                System.out.println("DEBUG: Dit is een Docent"); 
+                System.out.println("DEBUG: Dit is een Docent"); 
+                session.setAttribute("aantalGroepen", mb.getAantalGroepen());
+                session.setAttribute("groepsIndeling", mb.getGroepen());
                 gotoPage("groepsIndeling.jsp",request,response);
             }
         }

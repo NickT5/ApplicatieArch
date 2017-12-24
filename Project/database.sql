@@ -36,6 +36,8 @@ INSERT INTO gebruikers VALUES ('999','999','Herman','Crauwels');
 
 INSERT INTO groepen VALUES ('111','student');
 INSERT INTO groepen VALUES ('222','student');
+INSERT INTO groepen VALUES ('333','student');
+INSERT INTO groepen VALUES ('444','student');
 INSERT INTO groepen VALUES ('999','docent');
 
 INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'111');
