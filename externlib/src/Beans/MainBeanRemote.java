@@ -15,6 +15,7 @@ import javax.ejb.Remote;
 @Remote
 public interface MainBeanRemote {
         public String getVoornaamById(String id);
+        public String getAchternaamById(String id);
         public List getGroepen();
         public List<Integer> getAantalGroepen();
         public void test();
