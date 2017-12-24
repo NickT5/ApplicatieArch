@@ -65,7 +65,7 @@
         <div class="indeling-page">
             <div class="form">
                 <h1>Hallo ${voornaam}!</h1>        
-                <form method="post" action="<c:url value='controller.do'/>">
+                <form method="post" action="<c:url value='Controller.do'/>">
                     <table>
                         <tr>
                             <td>
@@ -77,13 +77,14 @@
                             </td>
                         </tr>
                         <tr>
-                             <td><input class="knop" type="submit" value="Edit"/></td>
-                        </tr>
-                        <tr>
-                            <td><input class="knop" type="submit" value="Nieuw"/></td>
+                             <td><input class="knop" type="submit" value="Edit"/><input type="hidden" name="from" value="groepsIndeling1"></td>
                         </tr>
                     </table>
                 </form>
+                <form method="post" action="<c:url value='Controller.do'/>">
+                        <input class="knop" type="submit" value="Nieuw"/>
+                        <input type="hidden" name="from" value="groepsIndeling2">
+                </form>    
             </div>        
         </div>        
     </body>

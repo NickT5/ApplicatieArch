@@ -8,6 +8,8 @@ package Container;
 import Beans.MainBeanRemote;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -44,16 +46,39 @@ public class Controller extends HttpServlet {
             String voornaam = mb.getVoornaamById(id);           //Voornaam van ingelogd persoon
             session.setAttribute("voornaam", voornaam);
             
+            System.out.println("DEBUG: In Servlet"); 
+            
             if(request.isUserInRole("student")){
                 System.out.println("DEBUG: Dit is een Student");
                 gotoPage("menu.jsp",request,response);
             }
             if(request.isUserInRole("docent")){
-                System.out.println("DEBUG: Dit is een Docent"); 
-                System.out.println("DEBUG: Dit is een Docent"); 
-                session.setAttribute("aantalGroepen", mb.getAantalGroepen());
-                session.setAttribute("groepsIndeling", mb.getGroepen());
-                gotoPage("groepsIndeling.jsp",request,response);
+                System.out.println("DEBUG: Dit is een Docent");  
+
+                if(request.getParameter("from")!= null){
+                    System.out.println("DEBUG: 'from' != null");
+                    switch(request.getParameter("from")){
+                        case"groepsIndeling1":
+                            System.out.println("DEBUG: 'from' groepsIndeling1 naar edit");
+                            String groep = request.getParameter("Groepen");
+                            String groepNummer = groep.replaceAll("[^0-9]", "");//vervang alles wat geen getal is door ""
+                            
+                            gotoPage("editGroep.jsp", request, response);
+                            break;
+                        case"groepsIndeling2":
+                            System.out.println("DEBUG: 'from' groepsIndeling2 naar nieuw");
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                }    
+                else{
+                    System.out.println("DEBUG: 'from' == null");
+                    session.setAttribute("aantalGroepen", mb.getAantalGroepen());
+                    session.setAttribute("groepsIndeling", mb.getGroepen());
+                    gotoPage("groepsIndeling.jsp",request,response);
+                }
             }
         }
     }

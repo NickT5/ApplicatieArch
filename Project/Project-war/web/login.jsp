@@ -72,7 +72,8 @@
                         <tr><td> <input class="input" type="text" name="j_username" placeholder="Naam"/></td></tr>
                         <tr><td> <input class="input" type="password" name="j_password" placeholder="Paswoord"/></td></tr>
                     </table>
-                    <input class="knop" type="submit" value="login" />
+                    <input class="knop" type="submit" value="login"/>
+                    <input type="hidden" name="from" value="login">
                 </form>
             </div>    
         </div>    
