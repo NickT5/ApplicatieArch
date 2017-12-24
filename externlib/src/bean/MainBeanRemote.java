@@ -17,4 +17,6 @@ public interface MainBeanRemote {
     public String getVoornaamById(String id);
     public List getGroepen();
     public List<Integer> getAantalGroepen();
+    public void test();
+    public void hoi();
 }
