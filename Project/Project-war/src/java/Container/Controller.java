@@ -5,17 +5,22 @@
  */
 package Container;
 
+import Beans.Gebruikers;
+import Beans.Groepen;
 import Beans.MainBeanRemote;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.time.Clock;
+import java.util.*;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.jasper.tagplugins.jstl.ForEach;
+
+//<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 import javax.servlet.http.HttpSession;
 
 /**
@@ -41,6 +46,8 @@ public class Controller extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
+            System.out.println("CONTROLLER");
+        
             HttpSession session = request.getSession();
             String id = request.getUserPrincipal().getName();   //Naam van de principal (gebruiker) is de ID.
             String voornaam = mb.getVoornaamById(id);           //Voornaam van ingelogd persoon
@@ -49,6 +56,30 @@ public class Controller extends HttpServlet {
             System.out.println("DEBUG: In Servlet"); 
             
             if(request.isUserInRole("student")){
+                System.out.println("Student");
+                
+                //Haal gegevens van de database
+                List<Groepen> lijstIds_van_studenten = mb.getIds_van_studenten();
+                
+                if(lijstIds_van_studenten.isEmpty()) System.out.println("Lijst studenten is LEEG");    
+                else
+                {
+                    System.out.println("Lijst studenten is NIET LEEG");    
+                    System.out.println("Lijst: "+ lijstIds_van_studenten);
+            
+                    for(int i=0;i<lijstIds_van_studenten.size();i++)
+                    {
+                        //Get all namen by id's van tabel gebruikers.                      
+                        Groepen gr = lijstIds_van_studenten.get(i);
+                        Gebruikers g = gr.getGebruikers();
+                        String id2 = g.getGebruikerId();
+                        System.out.println("ID: " + id2);
+                        String voornaam2 = mb.getVoornaamById(id2);
+                        System.out.println("VOORNAAM: " + voornaam2);
+                    }
+                    
+                }
+                
                 System.out.println("DEBUG: Dit is een Student");
                 gotoPage("menu.jsp",request,response);
             }

@@ -4,6 +4,7 @@
     Author     : kevin
 --%>
 
+<%@page import="java.util.ArrayList"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -13,5 +14,7 @@
     </head>
     <body>
         <h1>Hallo <%= request.getUserPrincipal() %>!</h1>
+        <p>Geef aan met welke personen je wel of niet wil samen zitten in een groep.</p>
+
     </body>
 </html>
