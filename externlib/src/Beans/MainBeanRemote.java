@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -13,5 +14,6 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface MainBeanRemote {
-    
+        public List getIds_van_studenten();
+        public String getStudentVoornaamById(String id); 
 }
