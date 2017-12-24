@@ -18,11 +18,13 @@ import javax.persistence.PersistenceContext;
 public class MainBean implements MainBeanRemote {
     @PersistenceContext private EntityManager em;
     
+    @Override
     public List getGroepen()
     {
         return em.createNamedQuery("Groepsindeling.findAll").getResultList();
     }
     
+    @Override
     public List<Integer> getAantalGroepen()
     {
         return em.createNamedQuery("Groepsindeling.aantalGroepen").getResultList();
@@ -33,10 +35,23 @@ public class MainBean implements MainBeanRemote {
      * @param id
      * @return Voornaam van gebruiker
      */
+    @Override
     public String getVoornaamById(String id)
     {
         Gebruikers g = (Gebruikers) em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult(); 
         String voornaam = g.getVoornaam();
         return voornaam;
+    }
+
+    @Override
+    public void test()
+    {
+        
+    }
+    
+    @Override
+    public void hoi()
+    {
+        
     }
 }
