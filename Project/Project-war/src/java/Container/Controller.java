@@ -8,9 +8,6 @@ package Container;
 import Beans.MainBeanRemote;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.Principal;
-import java.util.Iterator;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -52,7 +49,8 @@ public class Controller extends HttpServlet {
                 gotoPage("menu.jsp",request,response);
             }
             if(request.isUserInRole("docent")){
-                System.out.println("DEBUG: Dit is een Docent");  
+                System.out.println("DEBUG: Dit is een Docent"); 
+                System.out.println("DEBUG: Dit is een Docent"); 
                 session.setAttribute("aantalGroepen", mb.getAantalGroepen());
                 session.setAttribute("groepsIndeling", mb.getGroepen());
                 gotoPage("groepsIndeling.jsp",request,response);
