@@ -54,6 +54,14 @@ public class MainBean implements MainBeanRemote {
         String voornaam = g.getVoornaam();
         return voornaam;
     }
+    
+    @Override
+    public String getAchternaamById(String id)
+    {
+        Gebruikers g = (Gebruikers) em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult(); 
+        String achternaam = g.getAchternaam();
+        return achternaam;  
+    }
 
     @Override
     public void test()
