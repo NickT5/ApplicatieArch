@@ -39,7 +39,7 @@
         <section>
             <div>
                 <h2>Niet voorkeur</h2>
-                <select multiple id="leftValues" size="5"></select>
+                <select multiple id="leftValues" size="10"></select>
             </div>
             <div>
                 <input type="button" id="btnLeft1" value="&lt;&lt;" />
@@ -47,7 +47,7 @@
             </div>
             <div>
                 <h2>Alle medestudenten</h2>
-                <select multiple id="midValues" size="5">
+                <select multiple id="midValues" size="10">
                     <c:forEach var="naam" items="${namen}">
                         <option>${naam}</option>
                     </c:forEach>
@@ -59,7 +59,7 @@
             </div>
             <div>
                 <h2>Voorkeur</h2>
-                <select multiple id="rightValues" size="5"></select>
+                <select multiple id="rightValues" size="10"></select>
             </div>
         </section>
 
