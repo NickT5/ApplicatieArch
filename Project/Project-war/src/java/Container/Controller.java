@@ -61,6 +61,7 @@ public class Controller extends HttpServlet {
                 
                 //Haal gegevens van de database
                 List<Groepen> lijstIds_van_studenten = mb.getIds_van_studenten();
+                List<String> lijstNamen_van_studenten = new ArrayList<String>();
                 
                 if(lijstIds_van_studenten.isEmpty()) System.out.println("Lijst studenten is LEEG");    
                 else
@@ -70,14 +71,20 @@ public class Controller extends HttpServlet {
             
                     for(int i=0;i<lijstIds_van_studenten.size();i++)
                     {
-                        //Get all namen by id's van tabel gebruikers.                      
+                        //Get all namen by id's van tabel gebruikers (enkel studenten).                      
                         Groepen gr = lijstIds_van_studenten.get(i);
                         Gebruikers g = gr.getGebruikers();
                         String id2 = g.getGebruikerId();
                         System.out.println("ID: " + id2);
                         String voornaam2 = mb.getVoornaamById(id2);
                         System.out.println("VOORNAAM: " + voornaam2);
+                        String achternaam2 = mb.getAchternaamById(id2);
+                        System.out.println("ACHTERNAAM: " + achternaam2);
+                        String naam = voornaam2 + " " + achternaam2;
+                        lijstNamen_van_studenten.add(naam);
                     }
+                    System.out.println("NAMEN: " + lijstNamen_van_studenten);
+                    session.setAttribute("namen", lijstNamen_van_studenten);
                     
                 }
                 
