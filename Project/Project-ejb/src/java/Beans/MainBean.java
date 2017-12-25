@@ -66,4 +66,11 @@ public class MainBean implements MainBeanRemote {
     {
         
     }
+    
+    public List getStudentenInGroep(int nr)
+    {
+        return em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
+    }
+    
+
 }
