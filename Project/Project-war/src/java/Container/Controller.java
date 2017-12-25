@@ -51,7 +51,10 @@ public class Controller extends HttpServlet {
             HttpSession session = request.getSession();
             String id = request.getUserPrincipal().getName();   //Naam van de principal (gebruiker) is de ID.
             String voornaam = mb.getVoornaamById(id);           //Voornaam van ingelogd persoon
-            session.setAttribute("voornaam", voornaam);
+            String achternaam = mb.getAchternaamById(id);       //Achternaam van ingelogd persoon
+            String naamIngelogd = voornaam + " " + achternaam;
+            //session.setAttribute("voornaam", voornaam);
+            session.setAttribute("naamIngelogd", naamIngelogd);
             
             System.out.println("DEBUG: In Servlet"); 
             
@@ -73,16 +76,14 @@ public class Controller extends HttpServlet {
                         //Get all namen by id's van tabel gebruikers (enkel studenten).                      
                         Groepen gr = lijstIds_van_studenten.get(i);
                         Gebruikers g = gr.getGebruikers();
-                        String id2 = g.getGebruikerId();
-                        System.out.println("ID: " + id2);
-                        String voornaam2 = mb.getVoornaamById(id2);
-                        System.out.println("VOORNAAM: " + voornaam2);
-                        String achternaam2 = mb.getAchternaamById(id2);
-                        System.out.println("ACHTERNAAM: " + achternaam2);
-                        String naam = voornaam2 + " " + achternaam2;
-                        lijstNamen_van_studenten.add(naam);
+                        String id2 = g.getGebruikerId();            //Gebruiker ID ophalen
+                        String vn = mb.getVoornaamById(id2);        //Voornaam ophalen met ID
+                        String an = mb.getAchternaamById(id2);      //Achternaam ophalen met ID
+                        String naam = vn + " " + an;                //Voor-en achternaam concatineren
+                        if(naam.equals(naamIngelogd)) continue;     //Persoon zelf moet niet in de lijst zitten
+                        lijstNamen_van_studenten.add(naam);         //Naam toevoegen aan lijst
                     }
-                    System.out.println("NAMEN: " + lijstNamen_van_studenten);
+                    System.out.println("NAMEN: " + lijstNamen_van_studenten);   //Debug
                     session.setAttribute("namen", lijstNamen_van_studenten);
                     
                 }

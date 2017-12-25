@@ -13,55 +13,55 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <style>
-            selectmenu{
-                padding: 8px;
-            }
-            div{
-                float: left;
-                padding: 4px;
-            }
-            select,input[type="text"]
-            {
-                width: 160px;
-                box-sizing: border-box;
-            }
-            
+        section{
+            padding: 8px;
+            background-color: #f0f0f0;
+            text-align: center;             
+        }
+
+        div{
+            display: inline-block;
+        }
+        input[type="button"]{
+           display: block;
+        }
+        select,input[type="text"]{
+            width: 160px;
+        }           
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     </head>
     <body>
-        
-
-        <h1>Hallo <%= request.getUserPrincipal() %>!</h1>
+        <h1>Hallo ${naamIngelogd}!</h1>
         <p>Geef aan met welke personen je wel of niet wil samen zitten in een groep.</p>
 
-        <div id="selectmenu">
+        <section>
             <div>
+                <h2>Niet voorkeur</h2>
                 <select multiple id="leftValues" size="5"></select>
             </div>
-
             <div>
                 <input type="button" id="btnLeft1" value="&lt;&lt;" />
                 <input type="button" id="btnRight1" value="&gt;&gt;" />
             </div>
             <div>
+                <h2>Alle medestudenten</h2>
                 <select multiple id="midValues" size="5">
                     <c:forEach var="naam" items="${namen}">
                         <option>${naam}</option>
                     </c:forEach>
                 </select>
             </div>
-
             <div>
                 <input type="button" id="btnLeft2" value="&lt;&lt;" />
                 <input type="button" id="btnRight2" value="&gt;&gt;" />
             </div>
-
             <div>
+                <h2>Voorkeur</h2>
                 <select multiple id="rightValues" size="5"></select>
             </div>
-        </div>
+        </section>
 
         <script>
             $("#btnLeft1").click(function () {
