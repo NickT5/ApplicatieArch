@@ -21,4 +21,6 @@ public interface MainBeanRemote {
         public void test();
         public void hoi();
         public List getIds_van_studenten();
+        public List getStudentenInGroep(int nr);
+        
 }
