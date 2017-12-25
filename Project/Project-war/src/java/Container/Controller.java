@@ -7,6 +7,7 @@ package Container;
 
 import Beans.Gebruikers;
 import Beans.Groepen;
+import Beans.Groepsindeling;
 import Beans.MainBeanRemote;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -92,7 +93,16 @@ public class Controller extends HttpServlet {
                         case"groepsIndeling1":
                             System.out.println("DEBUG: 'from' groepsIndeling1 naar edit");
                             String groep = request.getParameter("Groepen");
-                            String groepNummer = groep.replaceAll("[^0-9]", "");//vervang alles wat geen getal is door ""
+                            int groepNummer = Integer.parseInt(groep.replaceAll("[^0-9]", ""));//vervang alles wat geen getal is door ""
+                            
+                            List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
+                            List<Groepen> alleStudenten = mb.getIds_van_studenten();
+                            filterStudenten(studentenInGroep, alleStudenten);
+                            
+                            session.setAttribute("studentenInGroep", studentenInGroep);
+                            session.setAttribute("groepnummer", groepNummer);
+                            session.setAttribute("alleStudenten", alleStudenten);
+                            
                             
                             gotoPage("editGroep.jsp", request, response);
                             break;
@@ -107,8 +117,27 @@ public class Controller extends HttpServlet {
                 else{
                     System.out.println("DEBUG: 'from' == null");
                     session.setAttribute("aantalGroepen", mb.getAantalGroepen());
-                    session.setAttribute("groepsIndeling", mb.getGroepen());
                     gotoPage("groepsIndeling.jsp",request,response);
+                }
+            }
+        }
+    }
+    
+    public void filterStudenten(List<Groepsindeling> studenten, List<Groepen> alleStudenten)
+    {
+        Iterator<Groepsindeling> i = studenten.iterator();
+        Iterator<Groepen> j = alleStudenten.iterator();
+        while(i.hasNext())
+        {
+            Groepsindeling student1 = i.next();
+            while(j.hasNext())
+            {
+                Groepen student2 = j.next();
+                if(student1.getGebruikerId().getGebruikerId().equals(student2.getId()))
+                {
+                     System.out.println(student1.getGebruikerId().getVoornaam()+" zit al in de lijst");
+                     j.remove();
+                     break;
                 }
             }
         }
