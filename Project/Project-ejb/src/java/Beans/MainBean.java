@@ -80,5 +80,6 @@ public class MainBean implements MainBeanRemote {
         return em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
     }
     
+    
 
 }
