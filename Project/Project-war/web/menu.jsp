@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Voorkeurspagina</title>
         <style>
         section{
             padding: 8px;
@@ -36,10 +36,11 @@
         <h1>Hallo ${naamIngelogd}!</h1>
         <p>Geef aan met welke personen je wel of niet wil samen zitten in een groep.</p>
 
+    <form method="post" action="<c:url value='Controller.do'/>">
         <section>
             <div>
                 <h2>Niet voorkeur</h2>
-                <select multiple id="leftValues" size="5"></select>
+                <select multiple id="leftValues" size="10" name="nietvoorkeur"></select>
             </div>
             <div>
                 <input type="button" id="btnLeft1" value="&lt;&lt;" />
@@ -47,7 +48,7 @@
             </div>
             <div>
                 <h2>Alle medestudenten</h2>
-                <select multiple id="midValues" size="5">
+                <select multiple id="midValues" size="10">
                     <c:forEach var="naam" items="${namen}">
                         <option>${naam}</option>
                     </c:forEach>
@@ -59,10 +60,13 @@
             </div>
             <div>
                 <h2>Voorkeur</h2>
-                <select multiple id="rightValues" size="5"></select>
+                <select multiple id="rightValues" size="10" name="voorkeur"></select>
             </div>
+            <input type="submit" value="Save"/>
         </section>
-
+        <input type="hidden" name="from" value="menu">
+    </form>
+            
         <script>
             $("#btnLeft1").click(function () {
                 var selectedItem = $("#midValues option:selected");

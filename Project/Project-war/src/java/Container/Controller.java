@@ -60,9 +60,9 @@ public class Controller extends HttpServlet {
             System.out.println("DEBUG: In Servlet"); 
             
             if(request.isUserInRole("student")){
-                System.out.println("Student");
+                System.out.println("Dit is een student");
                 
-                //Haal gegevens van de database
+                //Haal alle studenten uit de database
                 List<Groepen> lijstIds_van_studenten = mb.getIds_van_studenten();
                 List<String> lijstNamen_van_studenten = new ArrayList<String>();
                 
@@ -84,13 +84,35 @@ public class Controller extends HttpServlet {
                         if(naam.equals(naamIngelogd)) continue;     //Persoon zelf moet niet in de lijst zitten
                         lijstNamen_van_studenten.add(naam);         //Naam toevoegen aan lijst
                     }
+                    Collections.sort(lijstNamen_van_studenten);      //Sorteer namen alfabetisch
                     System.out.println("NAMEN: " + lijstNamen_van_studenten);   //Debug
-                    session.setAttribute("namen", lijstNamen_van_studenten);
-                    
+                    session.setAttribute("namen", lijstNamen_van_studenten);      
                 }
                 
-                System.out.println("DEBUG: Dit is een Student");
-                gotoPage("menu.jsp",request,response);
+                //Decide to which page you have to go
+                if(request.getParameter("from")!= null){
+                    System.out.println("DEBUG: Hiddenfield from != null");
+                    switch(request.getParameter("from")){
+                        case "menu":
+                            //Niet Voorkeur en Voorkeur ophalen uit de request (menu.jsp)
+                            String[] arrayNVK = request.getParameterValues("nietvoorkeur");
+                            String[] arrayVK = request.getParameterValues("voorkeur");
+                            for(int i=0;i<arrayNVK.length;i++) System.out.print("DEBUG NVK: "+arrayNVK[i]);  //DEBUG
+                            for(int i=0;i<arrayVK.length;i++) System.out.print("DEBUG VK: "+arrayVK[i]);    //DEBUG
+                            //TODO: 
+                            // and Save into DB
+                            
+                            
+                            gotoPage("voorlopigeKeuze.jsp",request,response);
+                        default:
+                            break;
+                    }
+                }    
+                else{
+                    System.out.println("DEBUG: Hiddenfield from == null");
+                    gotoPage("menu.jsp",request,response);
+                }
+                
             }
             if(request.isUserInRole("docent")){
                 System.out.println("DEBUG: Dit is een Docent");  

@@ -23,4 +23,5 @@ public interface MainBeanRemote {
         public List getIds_van_studenten();
         public List getStudentenInGroep(int nr);
        // public List<String> getVoorkeurStudent(String id);
+        //public List getIdByFullName(String name); //TODO
 }
