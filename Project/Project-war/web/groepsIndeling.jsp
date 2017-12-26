@@ -64,7 +64,7 @@
     <body>
         <div class="indeling-page">
             <div class="form">
-                <h1>Hallo ${voornaam}!</h1>        
+                <h1>Hallo ${naamIngelogd}!</h1>        
                 <form method="post" action="<c:url value='Controller.do'/>">
                     <table>
                         <tr>

@@ -1,7 +1,8 @@
 DROP TABLE IF EXISTS groepen;
 DROP TABLE IF EXISTS groepsindeling;
+DROP TABLE IF EXISTS nietvoorkeur;
+DROP TABLE IF EXISTS voorkeur;
 DROP TABLE IF EXISTS gebruikers;
-
 
 CREATE TABLE gebruikers (
 	gebruiker_id varchar(20),
@@ -9,6 +10,20 @@ CREATE TABLE gebruikers (
 	voornaam varchar(20),
 	achternaam varchar(20),
 	PRIMARY KEY(gebruiker_id)
+);
+
+CREATE TABLE voorkeur (
+        id int NOT NULL AUTO_INCREMENT,
+        gebruiker_id varchar(20),
+        vk varchar(20),
+        PRIMARY KEY(id)
+);
+
+CREATE TABLE nietvoorkeur (
+        id int NOT NULL AUTO_INCREMENT,
+        gebruiker_id varchar(20),
+        nvk varchar(20),
+        PRIMARY KEY(id)
 );
 
 CREATE TABLE groepsindeling (
@@ -75,3 +90,7 @@ INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'1001');
 INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (1,'1002');
 INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (2,'1005');
 INSERT INTO groepsindeling (groepnummer,gebruiker_id) VALUES (2,'1006');
+
+INSERT INTO voorkeur (gebruiker_id,vk) VALUES ('1000','1003');
+
+INSERT INTO nietvoorkeur (gebruiker_id,nvk) VALUES ('1006','1011');

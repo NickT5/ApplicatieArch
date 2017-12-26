@@ -38,9 +38,9 @@
                 <h1>Groep ${groepnummer}</h1>
                     <section class="container">
                         <div>
-                            <select id="leftValues" size="5" multiple>
+                            <select id="leftValues" size="6" multiple>
                                 <c:forEach var="g" items="${studentenInGroep}">
-                                    <option>${g.gebruikerId.voornaam}</option><!-- gebruikerId is van het type Gebruikers -->
+                                    <option>${g.gebruikerId.voornaam} ${g.gebruikerId.achternaam}</option><!-- gebruikerId is van het type Gebruikers -->
                                 </c:forEach> 
                             </select>
                         </div>
@@ -49,13 +49,19 @@
                             <input type="button" id="btnLeft" value="&lt;&lt;" />
                         </div>
                         <div>
-                            <select id="rightValues" size="4" multiple>
+                            <select id="rightValues" size="6" multiple>
                                 <c:forEach var="g" items="${alleStudenten}">
-                                    <option>${g.gebruikers.voornaam}</option><!-- gebruikerId is van het type Gebruikers -->
+                                    <option>${g.gebruikers.voornaam} ${g.gebruikers.achternaam}</option><!-- gebruikerId is van het type Gebruikers -->
                                 </c:forEach> 
                             </select>
                         </div>  
                     </section>
+            </div>
+            <div class="voorkeur">
+                <p></p>   
+            </div> 
+            <div class="nietvoorkeur">
+                <p></p>        
             </div> 
         </div>
         <script>

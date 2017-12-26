@@ -107,11 +107,17 @@ public class Controller extends HttpServlet {
                             List<Groepen> alleStudenten = mb.getIds_van_studenten();
                             filterStudenten(studentenInGroep, alleStudenten);
                             
+                            /*for(int i=0; i<studentenInGroep.size(); i++)
+                            {
+                                Gebruikers g = studentenInGroep.get(i).getGebruikerId();
+                                System.out.println(g.getGebruikerId());
+                                
+                            }*/
+                            
                             session.setAttribute("studentenInGroep", studentenInGroep);
                             session.setAttribute("groepnummer", groepNummer);
                             session.setAttribute("alleStudenten", alleStudenten);
-                            
-                            
+                                                        
                             gotoPage("editGroep.jsp", request, response);
                             break;
                         case"groepsIndeling2":
