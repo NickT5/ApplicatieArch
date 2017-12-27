@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author kevin
+ * @author Nick
  */
 @Entity
 @Table(name = "voorkeur")
@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Voorkeur.findAll", query = "SELECT v FROM Voorkeur v")
     , @NamedQuery(name = "Voorkeur.findById", query = "SELECT v FROM Voorkeur v WHERE v.id = :id")
+    , @NamedQuery(name = "Voorkeur.bestaat", query = "SELECT v FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId AND v.vk = :vk")
     , @NamedQuery(name = "Voorkeur.findByGebruikerId", query = "SELECT v FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId")
     , @NamedQuery(name = "Voorkeur.findByVk", query = "SELECT v FROM Voorkeur v WHERE v.vk = :vk")})
 public class Voorkeur implements Serializable {
