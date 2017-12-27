@@ -97,11 +97,25 @@ public class Controller extends HttpServlet {
                             //Niet Voorkeur en Voorkeur ophalen uit de request (menu.jsp)
                             String[] arrayNVK = request.getParameterValues("nietvoorkeur");
                             String[] arrayVK = request.getParameterValues("voorkeur");
-                            for(int i=0;i<arrayNVK.length;i++) System.out.print("DEBUG NVK: "+arrayNVK[i]);  //DEBUG
-                            for(int i=0;i<arrayVK.length;i++) System.out.print("DEBUG VK: "+arrayVK[i]);    //DEBUG
-                            //TODO: 
-                            // and Save into DB
                             
+                            System.out.println("in menu");
+                            if(arrayNVK != null)
+                            {
+                                for(int i=0;i<arrayNVK.length;i++)
+                                {
+                                    String id_nvk = mb.getIdByFullName(arrayNVK[i]);                //Get ID van student
+                                    System.out.print("NVK naam: "+arrayNVK[i] + " | ID: "+id_nvk);  //DEBUG
+                                    mb.voegNvkToe(id, id_nvk);                                      //Voegtoe aan DB met check of het al bestaat.
+                                }
+                            }
+                            if(arrayVK != null)
+                            {
+                                for(int i=0;i<arrayVK.length;i++){
+                                    String id_vk = mb.getIdByFullName(arrayVK[i]);                 //Get ID van student
+                                    System.out.print("VK naam: "+arrayVK[i] + " | ID: "+id_vk);    //DEBUG
+                                    mb.voegVkToe(id, id_vk);
+                                }
+                            }
                             
                             gotoPage("voorlopigeKeuze.jsp",request,response);
                         default:
