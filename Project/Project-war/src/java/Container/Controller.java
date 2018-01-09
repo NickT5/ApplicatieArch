@@ -133,8 +133,8 @@ public class Controller extends HttpServlet {
                             gotoPage("voorlopigeKeuze.jsp",request,response);
                             break;
                         case "afmelden":
-                            session.invalidate();
-                            gotoPage("login.jsp", request, response);
+                            //session.invalidate();     //Oproepen in de logout.jsp pagina
+                            gotoPage("logout.jsp", request, response);
                             break;
                         default:
                             break;
@@ -178,8 +178,8 @@ public class Controller extends HttpServlet {
                             System.out.println("DEBUG: 'from' groepsIndeling2 naar nieuw");
                             break;
                         case "afmelden":
-                            session.invalidate();
-                            gotoPage("login.jsp", request, response);
+                            //session.invalidate();     //Oproepen in de logout.jsp pagina
+                            gotoPage("logout.jsp", request, response);
                             break;   
                         default:
                             break;
