@@ -7,8 +7,8 @@
     </head>
     <body>
         <% 
- 	request.getSession().invalidate(); 
- 	response.sendRedirect("Controller.do");
+            request.getSession().invalidate(); 
+            response.sendRedirect("Controller.do");
         %>
     </body>
 </html>
