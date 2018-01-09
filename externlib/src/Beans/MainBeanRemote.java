@@ -22,8 +22,10 @@ public interface MainBeanRemote {
         public void hoi();
         public List getIds_van_studenten();
         public List getStudentenInGroep(int nr);
-       // public List<String> getVoorkeurStudent(String id);
+        public List getVoorkeurByGebruikerId(String id);        //Get alle records tabel Voorkeur op basis van de ingelogde gebruiker id
+        public List getNietVoorkeurByGebruikerId(String id);
         public String getIdByFullName(String name);
         public void voegNvkToe(String gid, String nvk);
         public void voegVkToe(String gid, String vk);
+       
 }
