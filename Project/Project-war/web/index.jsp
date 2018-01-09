@@ -1,7 +1,7 @@
 <%-- 
     Document   : index
-    Created on : Nov 28, 2017, 9:33:08 AM
-    Author     : kevin
+    Created on : 28-Dec-2017, 16:37:41
+    Author     : Nick
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World!!!!!</h1>
+        <h1>Hello World!!</h1>
     </body>
 </html>

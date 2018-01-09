@@ -86,6 +86,9 @@
                         <input type="hidden" name="from" value="groepsIndeling2">
                 </form>    
             </div>        
-        </div>        
+        </div>
+    <footer>
+        <jsp:include page="footer.jsp"/>
+    </footer>
     </body>
 </html>

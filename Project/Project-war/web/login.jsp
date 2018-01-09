@@ -69,7 +69,7 @@
                 <h1>Welkom</h1>
                 <form method=post action="j_security_check" class="login-form">
                     <table>
-                        <tr><td> <input class="input" type="text" name="j_username" placeholder="Naam"/></td></tr>
+                        <tr><td> <input class="input" type="text" name="j_username" placeholder="Usernaam"/></td></tr>
                         <tr><td> <input class="input" type="password" name="j_password" placeholder="Paswoord"/></td></tr>
                     </table>
                     <input class="knop" type="submit" value="login"/>

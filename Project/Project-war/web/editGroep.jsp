@@ -75,5 +75,8 @@
              $("#rightValues").append(selectedItem);
             });
         </script>
+    <footer>
+        <jsp:include page="footer.jsp"/>
+    </footer>
     </body>
 </html>
