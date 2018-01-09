@@ -71,11 +71,13 @@ public class MainBean implements MainBeanRemote {
         
     }
     
-    @Override
+    /*@Override
     public void hoi()
     {
         
-    }
+    }*/
+    
+        public void kutprogramma(){}
     
     public List getStudentenInGroep(int nr)
     {
