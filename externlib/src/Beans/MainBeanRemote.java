@@ -19,7 +19,8 @@ public interface MainBeanRemote {
         public List getGroepen();
         public List<Integer> getAantalGroepen();
         public void test();
-        public void hoi();
+        //public void hoi();
+        public void kutprogramma();
         public List getIds_van_studenten();
         public List getStudentenInGroep(int nr);
         public List getVoorkeurByGebruikerId(String id);        //Get alle records tabel Voorkeur op basis van de ingelogde gebruiker id
