@@ -82,10 +82,17 @@ public class MainBean implements MainBeanRemote {
         return em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
     }
 
-    /*public List<String> getVoorkeurStudent(String id)
+    @Override
+    public List getVoorkeurByGebruikerId(String gid)
     {
-        //em.createNamedQuery("")
-    }*/
+        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", gid ).getResultList(); 
+    }
+
+    @Override
+    public List getNietVoorkeurByGebruikerId(String gid)
+    {
+        return em.createNamedQuery("Nietvoorkeur.findByGebruikerId").setParameter("gebruikerId", gid).getResultList(); 
+    }
     
     @Override
     public String getIdByFullName(String name)
