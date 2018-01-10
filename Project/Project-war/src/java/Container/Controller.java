@@ -143,44 +143,51 @@ public class Controller extends HttpServlet {
                             System.out.println("DEBUG: 'from' groepsIndeling1 naar edit");
                             String groep = request.getParameter("Groepen");
                             int groepNummer = Integer.parseInt(groep.replaceAll("[^0-9]", ""));//vervang alles wat geen getal is door ""
-                            
                             System.out.println("Edit groep "+groepNummer);
-                            if(mb.groepLeeg(groepNummer) == 0)
-                            {
-                                System.out.println("groep is niet leeg");
-                                List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
-                                List<String> studentenVoorkeur = getVoorkeurStudenten(studentenInGroep);
-                                List<Groepen> alleStudenten = mb.getIds_van_studenten();
-                                
-                                System.out.println("VOOR "+studentenInGroep);
-                                System.out.println("VOOR "+alleStudenten);
-                                
-                                filterStudenten(studentenInGroep, alleStudenten);
-                                
-                                System.out.println("NA "+studentenInGroep);
-                                System.out.println("NA "+alleStudenten);
                             
-
+                            if(mb.isGroepBevestigt(groepNummer))
+                            {
+                                List<Groepsindeling> groepsIndeling = mb.getStudentenInGroep(groepNummer);
+                                List<String> studentenInGroep = new ArrayList<String>();
+                                for(int i=0; i<groepsIndeling.size(); i++)
+                                {
+                                    String naam = groepsIndeling.get(i).getGebruikerId().getVoornaam()+" "+groepsIndeling.get(i).getGebruikerId().getAchternaam();
+                                    studentenInGroep.add(naam);
+                                }
                                 
-                                session.setAttribute("studentenVoorkeur", studentenVoorkeur);
-                                session.setAttribute("studentenInGroep", studentenInGroep);
-                                session.setAttribute("groepnummer", groepNummer);
-                                session.setAttribute("alleStudenten", alleStudenten);
+                                request.setAttribute("groepstudenten2", studentenInGroep);
+                                gotoPage("overzicht.jsp", request, response);
                             }
-                            else{
-                                System.out.println("groep is leeg");
-                                
-                                List<Groepen> alleStudenten = mb.getIds_van_studenten();
-                                
-                                session.setAttribute("studentenVoorkeur", null);
-                                session.setAttribute("studentenInGroep", null);
-                                session.setAttribute("groepnummer", groepNummer);
-                                session.setAttribute("alleStudenten", alleStudenten);
-                            }
+                            else
+                            {
+                                if(mb.groepLeeg(groepNummer) == 0)
+                                {
+                                    System.out.println("groep is niet leeg");
+                                    List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
+                                    List<String> studentenVoorkeur = getVoorkeurStudenten(studentenInGroep);
+                                    List<Groepen> alleStudenten = mb.getIds_van_studenten();
 
-                                                        
-                            gotoPage("editGroep.jsp", request, response);
+                                    filterStudenten(studentenInGroep, alleStudenten);
+
+                                    session.setAttribute("studentenVoorkeur", studentenVoorkeur);
+                                    session.setAttribute("studentenInGroep", studentenInGroep);
+                                    session.setAttribute("groepnummer", groepNummer);
+                                    session.setAttribute("alleStudenten", alleStudenten);
+                                }
+                                else{
+                                    System.out.println("groep is leeg");
+
+                                    List<Groepen> alleStudenten = mb.getIds_van_studenten();
+
+                                    session.setAttribute("studentenVoorkeur", null);
+                                    session.setAttribute("studentenInGroep", null);
+                                    session.setAttribute("groepnummer", groepNummer);
+                                    session.setAttribute("alleStudenten", alleStudenten);
+                                }
+                                gotoPage("editGroep.jsp", request, response);
+                            }
                             break;
+                            
                         case"groepsIndeling2":
                             System.out.println("DEBUG: 'from' groepsIndeling2 naar nieuw");
                             mb.voegGroepToe();
@@ -231,11 +238,15 @@ public class Controller extends HttpServlet {
                                 checkForInsertStudentInGroep(studentenInGroepInDb,groepstudenten2);
                             }
                             
-                            request.setAttribute("test", groepstudenten2);
+                            mb.bevestigGroep(groepNummer);
+                            request.setAttribute("groepstudenten2", groepstudenten2);
                             
                             gotoPage("overzicht.jsp", request, response);
                             break;
-                            
+                        case"overzicht":
+                            gotoPage("groepsIndeling.jsp", request, response);
+                            break;
+                             
                         case "afmelden":
                             //session.invalidate();     //Oproepen in de logout.jsp pagina
                             gotoPage("logout.jsp", request, response);

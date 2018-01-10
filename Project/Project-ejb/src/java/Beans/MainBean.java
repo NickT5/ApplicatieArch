@@ -264,4 +264,21 @@ public class MainBean implements MainBeanRemote {
         q.executeUpdate();
     }
     
+    public void bevestigGroep(int groepnummer)
+    {
+        Query q = em.createNamedQuery("Groepsindeling.updateGroepBevestigt");
+        q.setParameter("groepnummer", groepnummer);
+        q.executeUpdate();
+    }
+    
+    public boolean isGroepBevestigt(int groepnummer)
+    {
+        List<Groepsindeling> g = (List<Groepsindeling>)em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", groepnummer).getResultList();
+        if(g.get(0).getGroepBevestigt() == null)
+        {
+            return false;
+        }
+        return true;
+    }
+    
 }
