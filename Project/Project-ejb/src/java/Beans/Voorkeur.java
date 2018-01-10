@@ -29,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Voorkeur.findAll", query = "SELECT v FROM Voorkeur v")
     , @NamedQuery(name = "Voorkeur.findById", query = "SELECT v FROM Voorkeur v WHERE v.id = :id")
     , @NamedQuery(name = "Voorkeur.bestaat", query = "SELECT v FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId AND v.vk = :vk")
+    , @NamedQuery(name = "Voorkeur.deleteByGid", query = "DELETE FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId")        
+    , @NamedQuery(name = "Voorkeur.deleteByGidAndVk", query = "DELETE FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId AND v.vk = :vk")
     , @NamedQuery(name = "Voorkeur.findByGebruikerId", query = "SELECT v FROM Voorkeur v WHERE v.gebruikerId = :gebruikerId")
     , @NamedQuery(name = "Voorkeur.findByVk", query = "SELECT v FROM Voorkeur v WHERE v.vk = :vk")})
 public class Voorkeur implements Serializable {

@@ -247,6 +247,23 @@ public class MainBean implements MainBeanRemote {
         q.executeUpdate();
     }
     
+    @Override
+    public void deleteVkByGid(String gid)
+    {
+       Query q = em.createNamedQuery("Voorkeur.deleteByGid");
+       q.setParameter("gebruikerId", gid);
+       q.executeUpdate();
+    }
+    
+    @Override
+    public void deleteVkByGidAndVk(String gid, String vk)
+    {
+        Query q = em.createNamedQuery("Voorkeur.deleteByGidAndVk");
+        q.setParameter("gebruikerId", gid);
+        q.setParameter("vk", vk);
+        q.executeUpdate();
+    }
+    
     public void bevestigGroep(int groepnummer)
     {
         Query q = em.createNamedQuery("Groepsindeling.updateGroepBevestigt");

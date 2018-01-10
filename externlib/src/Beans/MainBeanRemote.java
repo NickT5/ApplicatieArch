@@ -40,6 +40,8 @@ public interface MainBeanRemote {
         public void updateGroepsindeling(String id, int groepnummer);
         public void deleteNvkByGid(String gid);
         public void deleteNvkByGidAndNvk(String gid, String nvk);
+        public void deleteVkByGid(String gid);
+        public void deleteVkByGidAndVk(String gid, String vk);
         public void bevestigGroep(int groepnummer);
         public boolean isGroepBevestigt(int groepnummer);
 }
