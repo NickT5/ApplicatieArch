@@ -230,11 +230,15 @@ public class Controller extends HttpServlet {
                                 checkForInsertStudentInGroep(studentenInGroepInDb,groepstudenten2);
                             }
                             
-                            request.setAttribute("test", groepstudenten2);
+                            mb.bevestigGroep(groepNummer);
+                            request.setAttribute("groepstudenten2", groepstudenten2);
                             
                             gotoPage("overzicht.jsp", request, response);
                             break;
-                            
+                        case"overzicht":
+                            gotoPage("groepsIndeling.jsp", request, response);
+                            break;
+                             
                         case "afmelden":
                             //session.invalidate();     //Oproepen in de logout.jsp pagina
                             gotoPage("logout.jsp", request, response);

@@ -17,7 +17,7 @@
             background: #1D8DB0;
         }
         .container{
-            width: 700px;
+            width: 350px;
             padding-top: 8%;
             margin: auto;
            
@@ -61,6 +61,21 @@
             font-size: 14px;
             cursor: pointer;
         }
+        .knop {
+          font-family: "Roboto", sans-serif;
+          text-transform: uppercase;
+          outline: 0;
+          background: #00407A;
+          width: 100%;
+          border: 0;
+          padding: 15px;
+          color: #FFFFFF;
+          font-size: 14px;
+          cursor: pointer;
+        }
+        .knop:hover,.form button:active,.form button:focus {
+          background: #00294f;
+        }
         #afmeldknop:hover{
           background: #fff3aa;
         }
@@ -70,11 +85,15 @@
         <div class="container">
             <div class="inhoud">            
                 <h1><u>Groep ${groepnummer}</u></h1>
-                <ul>
-                    <c:forEach var="g" items="${test}">
+                <form method="post" action="<c:url value='Controller.do'/>">
+                    <ul>
+                    <c:forEach var="g" items="${groepstudenten2}">
                         <li>${g}</li>
                     </c:forEach>  
-                </ul>
+                    </ul>
+                    <input class="knop" type="submit" value="Ok"/>
+                    <input type="hidden" name="from" value="overzicht">
+                </form>
             </div>
             <footer>
                 <jsp:include page="footer.jsp"/>
