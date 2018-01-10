@@ -9,6 +9,7 @@ import Beans.Gebruikers;
 import Beans.Groepen;
 import Beans.Groepsindeling;
 import Beans.MainBeanRemote;
+import Beans.Voorkeur;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Clock;
@@ -125,27 +126,54 @@ public class Controller extends HttpServlet {
                             String groep = request.getParameter("Groepen");
                             int groepNummer = Integer.parseInt(groep.replaceAll("[^0-9]", ""));//vervang alles wat geen getal is door ""
                             
-                            List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
-                            List<Groepen> alleStudenten = mb.getIds_van_studenten();
-                            filterStudenten(studentenInGroep, alleStudenten);
-                            
-                            /*for(int i=0; i<studentenInGroep.size(); i++)
+                            System.out.println("Edit groep "+groepNummer);
+                            if(mb.groepLeeg(groepNummer) == 0)
                             {
-                                Gebruikers g = studentenInGroep.get(i).getGebruikerId();
-                                System.out.println(g.getGebruikerId());
-                                
-                            }*/
+                                System.out.println("groep is niet leeg");
+                                List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
+                                List<String> studentenVoorkeur = getVoorkeurStudenten(studentenInGroep);
+                                List<Groepen> alleStudenten = mb.getIds_van_studenten();
+                                filterStudenten(studentenInGroep, alleStudenten);
                             
-                            session.setAttribute("studentenInGroep", studentenInGroep);
-                            session.setAttribute("groepnummer", groepNummer);
-                            session.setAttribute("alleStudenten", alleStudenten);
+                                session.setAttribute("studentenVoorkeur", studentenVoorkeur);
+                                session.setAttribute("studentenInGroep", studentenInGroep);
+                                session.setAttribute("groepnummer", groepNummer);
+                                session.setAttribute("alleStudenten", alleStudenten);
+                            }
+                            else{
+                                System.out.println("groep is leeg");
+                                
+                                List<Groepen> alleStudenten = mb.getIds_van_studenten();
+                                
+                                session.setAttribute("studentenVoorkeur", null);
+                                session.setAttribute("studentenInGroep", null);
+                                session.setAttribute("groepnummer", groepNummer);
+                                session.setAttribute("alleStudenten", alleStudenten);
+                            }
+
                                                         
                             gotoPage("editGroep.jsp", request, response);
                             break;
                         case"groepsIndeling2":
                             System.out.println("DEBUG: 'from' groepsIndeling2 naar nieuw");
+                            mb.voegGroepToe();
+                            session.setAttribute("aantalGroepen", mb.getAantalGroepen());
+                            gotoPage("groepsIndeling.jsp",request,response);
                             break;
+                           
+                        case"edit1":
+                            System.out.println("DEBUG: 'from' edit1 naar groepsIndeling");
+                            String[] groepstudenten = request.getParameterValues("studentenInGroep");
                             
+                            if(groepstudenten == null)  System.out.println("ERROR is null");
+                            
+                            for (String groepstudenten1 : groepstudenten) {
+                                System.out.println(groepstudenten1);
+                            }
+                            
+                            gotoPage("groepsIndeling.jsp",request,response);
+                            break;
+                        
                         default:
                             break;
                     }
@@ -177,6 +205,23 @@ public class Controller extends HttpServlet {
                 }
             }
         }
+    }
+    
+    public List<String> getVoorkeurStudenten(List<Groepsindeling> studentenInGroep)
+    {
+        List<Voorkeur> voorkeur  = null;
+        List<String> s = new ArrayList<>();
+        for(int i=0; i<studentenInGroep.size(); i++)
+        {
+            Gebruikers g = studentenInGroep.get(i).getGebruikerId();
+            voorkeur = mb.getVoorkeurStudent(g.getGebruikerId());
+            for(int j=0;j<voorkeur.size();j++)
+            {
+                //System.out.println(g.getVoornaam()+" wilt samenzitten met "+mb.getVoornaamById(voorkeur.get(j).getVk()));
+                s.add(g.getVoornaam()+" "+g.getAchternaam()+" wilt samenzitten met "+mb.getVoornaamById(voorkeur.get(j).getVk())+" "+mb.getAchternaamById(voorkeur.get(j).getVk()));
+                }                
+        }
+        return s;
     }
     
     protected void gotoPage(String jsp, HttpServletRequest request, HttpServletResponse response)
