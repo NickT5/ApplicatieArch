@@ -95,6 +95,7 @@ public class Controller extends HttpServlet {
                                     mb.voegVkToe(id, id_vk);                                       //Voegtoe aan DB met check of het al bestaat.
                                 }
                             }*/
+                            deleteNvkAndVkFromDB(id,request);
                             AddNvkAndVkToDB(id,request);                                            //Get from request, Save to DB
                             setupNvkAndVkNames(id, lijstNamen_van_studenten, request);              //Get from DB, order, filter, add to request
                             
@@ -446,6 +447,54 @@ public class Controller extends HttpServlet {
                 mb.voegVkToe(id, id_vk);                                       //Voegtoe aan DB met check of het al bestaat.
             }
         }
+    }
+    
+    public void deleteNvkAndVkFromDB(String id, HttpServletRequest request)
+    {
+        //TODO
+        boolean gevonden = false; 
+        
+        String[] arrayNVK = request.getParameterValues("nietvoorkeur");
+        String[] arrayVK = request.getParameterValues("voorkeur");
+        
+        //Get alle Voorkeur en nietvoorkeur id's uit de DB voor de ingelogde gebruiker id 
+        List<String> list_nvk_names = HaalAlleNvkUitDB(id);
+        List<String> list_vk_names = HaalAlleVkUitDB(id);
+        
+            System.out.println("DEBUGGGGGGGG van DB "+list_nvk_names);
+            
+            
+        if(arrayNVK == null)
+        {       
+            mb.deleteNvkByGid(id);                  //Verwijder alles uit de NVK tabel
+        }
+        else{
+            //Vergelijk lijst v/d request met lijst uit de DB  voor NVK         
+            for(int i=0; i<list_nvk_names.size(); i++)
+            {
+                for(int j=0;j<arrayNVK.length;j++)
+                {
+                    System.out.println(list_nvk_names.get(i) + " vergelijken met " +arrayNVK[j]);
+                    if(arrayNVK[j].equals(list_nvk_names.get(i)))
+                    {
+                        gevonden=true;
+                        break;
+                    }
+                    else
+                    {
+                        gevonden=false;
+                    }
+                }
+                if(!gevonden)
+                {
+                    //Student verwijderen uit database
+                    System.out.println(list_nvk_names.get(i)+" moet gedelete worden.");
+                    mb.deleteNvkByGidAndNvk(id, mb.getIdByFullName(list_nvk_names.get(i)));
+                }
+            }
+        }
+              
+        
     }
     
     public void setupNvkAndVkNames(String id, List<String> lijstNamen_van_studenten, HttpServletRequest request)
