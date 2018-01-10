@@ -9,6 +9,8 @@ CREATE TABLE gebruikers (
         paswoord varchar(20),						
 	voornaam varchar(20),
 	achternaam varchar(20),
+
+
 	PRIMARY KEY(gebruiker_id)
 );
 
@@ -48,6 +50,7 @@ INSERT INTO gebruikers VALUES ('1001','1001','Kevin','Todts');
 INSERT INTO gebruikers VALUES ('1002','1002','Wouter','Symons');
 INSERT INTO gebruikers VALUES ('1003','1003','Jan','Stappers');
 INSERT INTO gebruikers VALUES ('1004','1004','Arno','Van Hoorebeeck');
+INSERT INTO gebruikers VALUES ('1005','1005','Jens','De Gendt');
 INSERT INTO gebruikers VALUES ('1006','1006','Wouter','Van de Wiele');
 INSERT INTO gebruikers VALUES ('1007','1007','Bert','Gadisseur');
 INSERT INTO gebruikers VALUES ('1008','1008','Siebren','Mylle');
