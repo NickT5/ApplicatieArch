@@ -187,14 +187,14 @@ public class Controller extends HttpServlet {
                             gotoPage("groepsIndeling.jsp",request,response);
                             break;
                            
-                        case"edit1":
+                        case"Save":
                             System.out.println("DEBUG: 'from' edit1 naar groepsIndeling");
                             String[] groepstudenten = request.getParameterValues("studentenInGroep");
                             groepNummer = (int)session.getAttribute("groepnummer");
                             System.out.println("DEBUG: groepnummer is"+groepNummer);                            
                             
                             List<Groepsindeling> studentenInGroepInDb = (List<Groepsindeling>)session.getAttribute("studentenInGroep");
-                            System.out.println("DEBUG: studentenInGroepInDb is"+studentenInGroepInDb); 
+                            System.out.println("DEBUG: studentenInGroepInDb is "+studentenInGroepInDb); 
                             
                             if(studentenInGroepInDb==null)
                             {
@@ -206,22 +206,35 @@ public class Controller extends HttpServlet {
                                 checkForDeleteStudentInGroep(studentenInGroepInDb,groepstudenten);
                                 checkForInsertStudentInGroep(studentenInGroepInDb,groepstudenten);
                             }
-
-                           
-                            if(groepstudenten != null)
-                            {
-                                for (String studentNaam : groepstudenten)
-                                {
-                                    System.out.println(studentNaam);
-                                    String studentId = mb.getIdByFullName(studentNaam);
-                                    
-                                }
-                            }
-                            
-
                             
                             gotoPage("groepsIndeling.jsp",request,response);
                             break;
+                            
+                        case "Bevestig":
+                            System.out.println("DEBUG: 'from' edit2 naar overzicht");
+                            String[] groepstudenten2 = request.getParameterValues("studentenInGroep");
+                            groepNummer = (int)session.getAttribute("groepnummer");
+                            System.out.println("DEBUG: groepnummer is "+groepNummer);                            
+                            
+                            studentenInGroepInDb = (List<Groepsindeling>)session.getAttribute("studentenInGroep");
+                            System.out.println("DEBUG: studentenInGroepInDb is "+studentenInGroepInDb); 
+                            
+                            if(studentenInGroepInDb==null)
+                            {
+                                //Oorspronkelijk een lege lijst in database. Wss een nieuwe groep aangemaakt
+                                insertStudentenInGroep(groepstudenten2,groepNummer);
+                            }
+                            else
+                            {
+                                checkForDeleteStudentInGroep(studentenInGroepInDb,groepstudenten2);
+                                checkForInsertStudentInGroep(studentenInGroepInDb,groepstudenten2);
+                            }
+                            
+                            request.setAttribute("test", groepstudenten2);
+                            
+                            gotoPage("overzicht.jsp", request, response);
+                            break;
+                            
                         case "afmelden":
                             //session.invalidate();     //Oproepen in de logout.jsp pagina
                             gotoPage("logout.jsp", request, response);
