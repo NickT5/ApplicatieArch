@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -80,8 +81,33 @@ public class MainBean implements MainBeanRemote {
         return em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
     }
 
-    /*public List<String> getVoorkeurStudent(String id)
+    public List getVoorkeurStudent(String id)
     {
-        //em.createNamedQuery("")
-    }*/
+        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", id).getResultList();
+    }
+    
+    public void voegGroepToe()
+    {
+        Groepsindeling g = new Groepsindeling();
+        Integer laatsteGroepnummer = (Integer)em.createNamedQuery("Groepsindeling.findLastGroepnummer").getSingleResult();
+        Integer nieuweGroepnummer = laatsteGroepnummer +1;
+        g.setGroepnummer(nieuweGroepnummer);
+        try
+        {
+            em.persist(g);
+        }
+        catch(Exception e)
+        {
+               System.out.println("Error tijdens het toevoegen van Groepsindeling: "+e);     
+        }
+    }
+    
+    public int groepLeeg(int nr)
+    {
+        List<Groepsindeling> g = (List<Groepsindeling>)em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
+        if(g.get(0).getGebruikerId() == null){
+            return 1;
+        }
+        return 0;
+    }
 }

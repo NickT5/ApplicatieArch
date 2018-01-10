@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Groepsindeling.findAll", query = "SELECT g FROM Groepsindeling g")
     , @NamedQuery(name = "Groepsindeling.aantalGroepen", query = "SELECT g.groepnummer FROM Groepsindeling g GROUP BY g.groepnummer")
+    , @NamedQuery(name = "Groepsindeling.findLastGroepnummer", query = "SELECT max(g.groepnummer) FROM Groepsindeling g")
     , @NamedQuery(name = "Groepsindeling.findById", query = "SELECT g FROM Groepsindeling g WHERE g.id = :id")
     , @NamedQuery(name = "Groepsindeling.findByGroepnummer", query = "SELECT g FROM Groepsindeling g WHERE g.groepnummer = :groepnummer")})
 public class Groepsindeling implements Serializable {
