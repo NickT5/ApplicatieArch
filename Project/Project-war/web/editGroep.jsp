@@ -64,7 +64,10 @@
         h1 {
           font-family: "Roboto", sans-serif;    
         }
-                #afmeldknop{
+        p {
+          font-family: "Roboto", sans-serif;    
+        }
+        #afmeldknop{
             font-family: "Roboto", sans-serif;
             text-transform: uppercase;
             background: #ffec7c;
@@ -105,13 +108,17 @@
                             </select>
                         </div>  
                     </section>
+
                     <div class="voorkeur">
                     <c:forEach var="v" items="${studentenVoorkeur}">
                         <p class="vk">${v}</p>
                     </c:forEach>    
                     </div> 
                     <div class="nietvoorkeur">
-                        
+                    <c:forEach var="v" items="${studentenNietVoorkeur}">
+                        <p class="vk">${v}</p>
+                    </c:forEach>
+             
                     </div>   
                     <input class="knop" type="submit" name="from" value="Save"/>
                     <input class="knop" type="submit" name="from" value="Bevestig"/>

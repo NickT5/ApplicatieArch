@@ -154,6 +154,7 @@ public class Controller extends HttpServlet {
                                     studentenInGroep.add(naam);
                                 }
                                 
+                                session.setAttribute("groepnummer", groepNummer);
                                 request.setAttribute("groepstudenten2", studentenInGroep);
                                 gotoPage("overzicht.jsp", request, response);
                             }
@@ -164,11 +165,13 @@ public class Controller extends HttpServlet {
                                     System.out.println("groep is niet leeg");
                                     List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
                                     List<String> studentenVoorkeur = getVoorkeurStudenten(studentenInGroep);
+                                    List<String> studentenNietVoorkeur = getNietVoorkeurStudenten(studentenInGroep);
                                     List<Groepen> alleStudenten = mb.getIds_van_studenten();
 
                                     filterStudenten(studentenInGroep, alleStudenten);
 
                                     session.setAttribute("studentenVoorkeur", studentenVoorkeur);
+                                    session.setAttribute("studentenNietVoorkeur", studentenNietVoorkeur);
                                     session.setAttribute("studentenInGroep", studentenInGroep);
                                     session.setAttribute("groepnummer", groepNummer);
                                     session.setAttribute("alleStudenten", alleStudenten);
@@ -519,6 +522,23 @@ public class Controller extends HttpServlet {
         }
               
         
+    }
+    
+    public List<String> getNietVoorkeurStudenten(List<Groepsindeling> studentenInGroep)
+    {
+        List<Nietvoorkeur> nietVoorkeur  = null;
+        List<String> s = new ArrayList<>();
+        for(int i=0; i<studentenInGroep.size(); i++)
+        {
+            Gebruikers g = studentenInGroep.get(i).getGebruikerId();
+            nietVoorkeur = mb.getNietVoorkeurByGebruikerId(g.getGebruikerId());
+            for(int j=0;j<nietVoorkeur.size();j++)
+            {
+                System.out.println(g.getVoornaam()+" wilt niet samenzitten met "+mb.getVoornaamById(nietVoorkeur.get(j).getNvk()));
+                s.add(g.getVoornaam()+" "+g.getAchternaam()+" wilt niet samenzitten met "+mb.getVoornaamById(nietVoorkeur.get(j).getNvk())+" "+mb.getAchternaamById(nietVoorkeur.get(j).getNvk()));
+                }                
+        }
+        return s;
     }
     
     public void setupNvkAndVkNames(String id, List<String> lijstNamen_van_studenten, HttpServletRequest request)

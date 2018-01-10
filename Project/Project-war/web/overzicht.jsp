@@ -73,6 +73,12 @@
           font-size: 14px;
           cursor: pointer;
         }
+        h1{
+           font-family: "Roboto", sans-serif;
+        }
+        li{
+           font-family: "Roboto", sans-serif;
+        }
         .knop:hover,.form button:active,.form button:focus {
           background: #00294f;
         }
