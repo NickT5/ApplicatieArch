@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author kevin
+ * @author Nick
  */
 @Entity
 @Table(name = "gebruikers")
@@ -34,8 +34,11 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Gebruikers.findByGebruikerId", query = "SELECT g FROM Gebruikers g WHERE g.gebruikerId = :gebruikerId")
     , @NamedQuery(name = "Gebruikers.findByPaswoord", query = "SELECT g FROM Gebruikers g WHERE g.paswoord = :paswoord")
     , @NamedQuery(name = "Gebruikers.findByVoornaam", query = "SELECT g FROM Gebruikers g WHERE g.voornaam = :voornaam")
-    , @NamedQuery(name = "Gebruikers.findByFullName", query = "SELECT g FROM Gebruikers g WHERE g.voornaam = :voornaam AND g.achternaam = :achternaam") 
-    , @NamedQuery(name = "Gebruikers.findByAchternaam", query = "SELECT g FROM Gebruikers g WHERE g.achternaam = :achternaam")})
+    , @NamedQuery(name = "Gebruikers.findByAchternaam", query = "SELECT g FROM Gebruikers g WHERE g.achternaam = :achternaam")
+    , @NamedQuery(name = "Gebruikers.findByFullName", query = "SELECT g FROM Gebruikers g WHERE g.voornaam = :voornaam AND g.achternaam = :achternaam")
+    , @NamedQuery(name = "Gebruikers.updateStudentBevestigt", query = "UPDATE Gebruikers g SET g.studentBevestigt = '1' WHERE g.gebruikerId = :gid")   
+    , @NamedQuery(name = "Gebruikers.findByStudentBevestigt", query = "SELECT g FROM Gebruikers g WHERE g.studentBevestigt = :studentBevestigt")
+    , @NamedQuery(name = "Gebruikers.findByGroepBevestigt", query = "SELECT g FROM Gebruikers g WHERE g.groepBevestigt = :groepBevestigt")})
 public class Gebruikers implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -54,6 +57,12 @@ public class Gebruikers implements Serializable {
     @Size(max = 20)
     @Column(name = "achternaam")
     private String achternaam;
+    @Size(max = 1)
+    @Column(name = "student_bevestigt")
+    private String studentBevestigt;
+    @Size(max = 1)
+    @Column(name = "groep_bevestigt")
+    private String groepBevestigt;
     @OneToMany(mappedBy = "gebruikerId")
     private Collection<Groepsindeling> groepsindelingCollection;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "gebruikers")
@@ -96,6 +105,22 @@ public class Gebruikers implements Serializable {
 
     public void setAchternaam(String achternaam) {
         this.achternaam = achternaam;
+    }
+
+    public String getStudentBevestigt() {
+        return studentBevestigt;
+    }
+
+    public void setStudentBevestigt(String studentBevestigt) {
+        this.studentBevestigt = studentBevestigt;
+    }
+
+    public String getGroepBevestigt() {
+        return groepBevestigt;
+    }
+
+    public void setGroepBevestigt(String groepBevestigt) {
+        this.groepBevestigt = groepBevestigt;
     }
 
     @XmlTransient

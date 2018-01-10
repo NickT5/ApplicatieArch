@@ -5,6 +5,7 @@
  */
 package Beans;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -85,7 +86,32 @@ public class MainBean implements MainBeanRemote {
     @Override
     public List getVoorkeurByGebruikerId(String gid)
     {
-        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", gid ).getResultList(); 
+        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", gid ).getResultList();
+    }
+    
+    public void voegGroepToe()
+    {
+        Groepsindeling g = new Groepsindeling();
+        Integer laatsteGroepnummer = (Integer)em.createNamedQuery("Groepsindeling.findLastGroepnummer").getSingleResult();
+        Integer nieuweGroepnummer = laatsteGroepnummer +1;
+        g.setGroepnummer(nieuweGroepnummer);
+        try
+        {
+            em.persist(g);
+        }
+        catch(Exception e)
+        {
+               System.out.println("Error tijdens het toevoegen van Groepsindeling: "+e);     
+        }
+    }
+    
+    public int groepLeeg(int nr)
+    {
+        List<Groepsindeling> g = (List<Groepsindeling>)em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
+        if(g.get(0).getGebruikerId() == null){
+            return 1;
+        }
+        return 0;
     }
 
     @Override
@@ -148,6 +174,21 @@ public class MainBean implements MainBeanRemote {
             voorkeur.setVk(vk);
             em.persist(voorkeur);
         }
+    }
+    
+    @Override
+    public void updateStudentBevestigt(String gid)
+    {
+        Query q = em.createNamedQuery("Gebruikers.updateStudentBevestigt");
+        q.setParameter("gid",gid);
+        q.executeUpdate();
+    }
+    
+    @Override
+    public String isStudentBevestigt(String gid)
+    {
+        Gebruikers g = (Gebruikers) em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", gid).getSingleResult(); 
+        return g.getStudentBevestigt();
     }
     
 }

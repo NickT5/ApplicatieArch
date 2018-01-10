@@ -74,6 +74,9 @@
         #afmeldknop:hover{
           background: #fff3aa;
         }
+        .rood{
+            color: #ff2b2b;
+        }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     </head>
@@ -83,7 +86,6 @@
         
         <h1>Hallo ${naamIngelogd}!</h1>
         <p>Geef aan met welke personen je wel of niet wil samen zitten in een groep.</p>
-
         <form method="post" action="<c:url value='Controller.do'/>">
             <section>
                 <div>
@@ -123,8 +125,7 @@
                 <input type="submit" class="knop" name="from" value="Bevestig"/>
             <!--<input type="hidden" name="from" value="menu">-->
         </form>
-        <h2><u>Opgelet:</u> Als je op de knop bevestig klikt, kan je uw keuze <u>niet</u> meer aanpassen!</h2>
-            
+        <h2 class="rood"><u>Opgelet:</u> Als je op de knop 'bevestig' klikt, kan je uw keuze <u>niet</u> meer aanpassen!</h2>
         <script>
             $("#btnLeft1").click(function () {
                 var selectedItem = $("#midValues option:selected");

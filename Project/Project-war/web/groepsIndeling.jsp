@@ -59,6 +59,19 @@
         h1 {
           font-family: "Roboto", sans-serif;    
         }
+                #afmeldknop{
+            font-family: "Roboto", sans-serif;
+            text-transform: uppercase;
+            background: #ffec7c;
+            border: 0;
+            padding: 15px;
+            color: black;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        #afmeldknop:hover{
+          background: #fff3aa;
+        }
         </style>
     </head>
     <body>
@@ -85,10 +98,10 @@
                         <input class="knop" type="submit" value="Nieuw"/>
                         <input type="hidden" name="from" value="groepsIndeling2">
                 </form>    
-            </div>        
+            </div>
+            <footer>
+                <jsp:include page="footer.jsp"/>
+            </footer>
         </div>
-    <footer>
-        <jsp:include page="footer.jsp"/>
-    </footer>
     </body>
 </html>
