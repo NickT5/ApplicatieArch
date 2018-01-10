@@ -10,7 +10,6 @@ CREATE TABLE gebruikers (
 	voornaam varchar(20),
 	achternaam varchar(20),
         student_bevestigt varchar(1) DEFAULT '0',
-        groep_bevestigt varchar(1) DEFAULT '0',
 	PRIMARY KEY(gebruiker_id)
 );
 
@@ -32,6 +31,7 @@ CREATE TABLE groepsindeling (
         id int NOT NULL AUTO_INCREMENT,
 	groepnummer int,
 	gebruiker_id varchar(20),
+        groep_bevestigt varchar(1) DEFAULT '0',
 	PRIMARY KEY(id),
 	FOREIGN KEY(gebruiker_id) REFERENCES gebruikers(gebruiker_id)
 	
