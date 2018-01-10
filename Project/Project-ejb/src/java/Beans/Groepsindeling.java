@@ -17,6 +17,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,7 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Groepsindeling.aantalGroepen", query = "SELECT g.groepnummer FROM Groepsindeling g GROUP BY g.groepnummer")
     , @NamedQuery(name = "Groepsindeling.findLastGroepnummer", query = "SELECT max(g.groepnummer) FROM Groepsindeling g")
     , @NamedQuery(name = "Groepsindeling.findById", query = "SELECT g FROM Groepsindeling g WHERE g.id = :id")
-    , @NamedQuery(name = "Groepsindeling.findByGroepnummer", query = "SELECT g FROM Groepsindeling g WHERE g.groepnummer = :groepnummer")})
+    , @NamedQuery(name = "Groepsindeling.findByGroepnummer", query = "SELECT g FROM Groepsindeling g WHERE g.groepnummer = :groepnummer")
+    , @NamedQuery(name = "Groepsindeling.findByGroepBevestigt", query = "SELECT g FROM Groepsindeling g WHERE g.groepBevestigt = :groepBevestigt")})
 public class Groepsindeling implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +46,9 @@ public class Groepsindeling implements Serializable {
     private Integer id;
     @Column(name = "groepnummer")
     private Integer groepnummer;
+    @Size(max = 1)
+    @Column(name = "groep_bevestigt")
+    private String groepBevestigt;
     @JoinColumn(name = "gebruiker_id", referencedColumnName = "gebruiker_id")
     @ManyToOne
     private Gebruikers gebruikerId;
@@ -69,6 +74,14 @@ public class Groepsindeling implements Serializable {
 
     public void setGroepnummer(Integer groepnummer) {
         this.groepnummer = groepnummer;
+    }
+
+    public String getGroepBevestigt() {
+        return groepBevestigt;
+    }
+
+    public void setGroepBevestigt(String groepBevestigt) {
+        this.groepBevestigt = groepBevestigt;
     }
 
     public Gebruikers getGebruikerId() {

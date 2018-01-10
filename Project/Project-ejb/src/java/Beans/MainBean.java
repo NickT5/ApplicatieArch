@@ -230,4 +230,21 @@ public class MainBean implements MainBeanRemote {
         return g.getStudentBevestigt();
     }
     
+    @Override
+     public void deleteNvkByGid(String gid)
+     {
+        Query q = em.createNamedQuery("Nietvoorkeur.deleteByGid");
+        q.setParameter("gebruikerId", gid);
+        q.executeUpdate();
+     }
+    
+    @Override
+    public void deleteNvkByGidAndNvk(String gid, String nvk)
+    {
+        Query q = em.createNamedQuery("Nietvoorkeur.deleteByGidAndNvk");
+        q.setParameter("gebruikerId", gid);
+        q.setParameter("nvk", nvk);
+        q.executeUpdate();
+    }
+    
 }
