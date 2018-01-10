@@ -19,11 +19,17 @@ public interface MainBeanRemote {
         public List getGroepen();
         public List<Integer> getAantalGroepen();
         public void test();
-        public void hoi();
+        //public void hoi();
         public List getIds_van_studenten();
         public List getStudentenInGroep(int nr);
-        public List getVoorkeurStudent(String id);
-        //public List getIdByFullName(String name); //TODO
+        //public List getVoorkeurStudent(String id);
+        
         public void voegGroepToe();
         public int groepLeeg(int nr);
+        public List getVoorkeurByGebruikerId(String id);        //Get alle records tabel Voorkeur op basis van de ingelogde gebruiker id
+        public List getNietVoorkeurByGebruikerId(String id);
+        public String getIdByFullName(String name);
+        public void voegNvkToe(String gid, String nvk);
+        public void voegVkToe(String gid, String vk);
+       
 }

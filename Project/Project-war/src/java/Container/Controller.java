@@ -9,6 +9,7 @@ import Beans.Gebruikers;
 import Beans.Groepen;
 import Beans.Groepsindeling;
 import Beans.MainBeanRemote;
+import Beans.Nietvoorkeur;
 import Beans.Voorkeur;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -64,53 +65,101 @@ public class Controller extends HttpServlet {
                 System.out.println("Dit is een student");
                 
                 //Haal alle studenten uit de database
-                List<Groepen> lijstIds_van_studenten = mb.getIds_van_studenten();
-                List<String> lijstNamen_van_studenten = new ArrayList<String>();
-                
-                if(lijstIds_van_studenten.isEmpty()) System.out.println("Lijst studenten is LEEG");    
-                else
-                {
-                    System.out.println("Lijst studenten is NIET LEEG");    
-                    System.out.println("Lijst: "+ lijstIds_van_studenten);
-            
-                    for(int i=0;i<lijstIds_van_studenten.size();i++)
-                    {
-                        //Get all namen by id's van tabel gebruikers (enkel studenten).                      
-                        Groepen gr = lijstIds_van_studenten.get(i);
-                        Gebruikers g = gr.getGebruikers();
-                        String id2 = g.getGebruikerId();            //Gebruiker ID ophalen
-                        String vn = mb.getVoornaamById(id2);        //Voornaam ophalen met ID
-                        String an = mb.getAchternaamById(id2);      //Achternaam ophalen met ID
-                        String naam = vn + " " + an;                //Voor-en achternaam concatineren
-                        if(naam.equals(naamIngelogd)) continue;     //Persoon zelf moet niet in de lijst zitten
-                        lijstNamen_van_studenten.add(naam);         //Naam toevoegen aan lijst
-                    }
-                    Collections.sort(lijstNamen_van_studenten);      //Sorteer namen alfabetisch
-                    System.out.println("NAMEN: " + lijstNamen_van_studenten);   //Debug
-                    session.setAttribute("namen", lijstNamen_van_studenten);      
-                }
+                List<String> lijstNamen_van_studenten = HaalAlleStudentenUitDB(naamIngelogd);
+                session.setAttribute("namen", lijstNamen_van_studenten); 
                 
                 //Decide to which page you have to go
                 if(request.getParameter("from")!= null){
-                    System.out.println("DEBUG: Hiddenfield from != null");
+                    System.out.println("DEBUG: Hiddenfield 'from' != null");
                     switch(request.getParameter("from")){
-                        case "menu":
+                        case "Save":
                             //Niet Voorkeur en Voorkeur ophalen uit de request (menu.jsp)
                             String[] arrayNVK = request.getParameterValues("nietvoorkeur");
                             String[] arrayVK = request.getParameterValues("voorkeur");
-                            for(int i=0;i<arrayNVK.length;i++) System.out.print("DEBUG NVK: "+arrayNVK[i]);  //DEBUG
-                            for(int i=0;i<arrayVK.length;i++) System.out.print("DEBUG VK: "+arrayVK[i]);    //DEBUG
-                            //TODO: 
-                            // and Save into DB
                             
+                            //Toevoegen aan de database
+                            if(arrayNVK != null)
+                            {
+                                for(int i=0;i<arrayNVK.length;i++)
+                                {
+                                    String id_nvk = mb.getIdByFullName(arrayNVK[i]);                //Get ID van student
+                                    System.out.print("NVK naam: "+arrayNVK[i] + " | ID: "+id_nvk);  //DEBUG
+                                    mb.voegNvkToe(id, id_nvk);                                      //Voegtoe aan DB met check of het al bestaat.
+                                }
+                            }
+                            if(arrayVK != null)
+                            {
+                                for(int i=0;i<arrayVK.length;i++){
+                                    String id_vk = mb.getIdByFullName(arrayVK[i]);                 //Get ID van student
+                                    System.out.print("VK naam: "+arrayVK[i] + " | ID: "+id_vk);    //DEBUG
+                                    mb.voegVkToe(id, id_vk);                                       //Voegtoe aan DB met check of het al bestaat.
+                                }
+                            }
                             
-                            gotoPage("voorlopigeKeuze.jsp",request,response);
+                            //Session variable(n) updaten. Nodig voor de jsp pagina.
+                            //Get alle Voorkeur en nietvoorkeur id's uit de DB voor de ingelogde gebruiker id
+                            List<String> list_nvk_names = HaalAlleNvkUitDB(id);
+                            List<String> list_vk_names = HaalAlleVkUitDB(id);
+
+                            Collections.sort(list_nvk_names);      //Sorteer namen alfabetisch
+                            Collections.sort(list_vk_names);       //Sorteer namen alfabetisch
+
+                            filterStrings(list_nvk_names, lijstNamen_van_studenten);    
+                            filterStrings(list_vk_names, lijstNamen_van_studenten);
+
+                            session.setAttribute("list_nvk_names", list_nvk_names);
+                            session.setAttribute("list_vk_names", list_vk_names);
+                            session.setAttribute("lijstNamen_van_studenten", lijstNamen_van_studenten); 
+                            
+                            gotoPage("menu.jsp",request,response);
+                            break;
+                        case "Bevestig":             
+                            //Get variables and store in session
+                            //Get alle Voorkeur en nietvoorkeur id's uit de DB voor de ingelogde gebruiker id
+                            List<String> list_nvk_names2 = HaalAlleNvkUitDB(id);
+                            List<String> list_vk_names2 = HaalAlleVkUitDB(id);
+
+                            Collections.sort(list_nvk_names2);      //Sorteer namen alfabetisch
+                            Collections.sort(list_vk_names2);       //Sorteer namen alfabetisch
+
+                            filterStrings(list_nvk_names2, lijstNamen_van_studenten);    
+                            filterStrings(list_vk_names2, lijstNamen_van_studenten);
+
+                            request.setAttribute("list_nvk_names", list_nvk_names2);
+                            request.setAttribute("list_vk_names", list_vk_names2);
+                            request.setAttribute("lijstNamen_van_studenten", lijstNamen_van_studenten); 
+                            
+                            gotoPage("finaal.jsp", request, response);
+                            break;
+                        /*case "voorlopigeKeuze":
+                            gotoPage("finaal.jsp", request, response);
+                            break;*/
+                        case "afmelden":
+                            //session.invalidate();     //Oproepen in de logout.jsp pagina
+                            gotoPage("logout.jsp", request, response);
+                            break;
                         default:
                             break;
                     }
                 }    
                 else{
-                    System.out.println("DEBUG: Hiddenfield from == null");
+                    System.out.println("DEBUG: Hiddenfield 'from' == null");
+                    //Je komt van login.jsp
+                    
+                    //Get alle Voorkeur en nietvoorkeur id's uit de DB voor de ingelogde gebruiker id
+                    List<String> list_nvk_names = HaalAlleNvkUitDB(id);
+                    List<String> list_vk_names = HaalAlleVkUitDB(id);
+                    
+                    Collections.sort(list_nvk_names);      //Sorteer namen alfabetisch
+                    Collections.sort(list_vk_names);       //Sorteer namen alfabetisch
+
+                    filterStrings(list_nvk_names, lijstNamen_van_studenten);    
+                    filterStrings(list_vk_names, lijstNamen_van_studenten);
+                            
+                    session.setAttribute("list_nvk_names", list_nvk_names);
+                    session.setAttribute("list_vk_names", list_vk_names);
+                    session.setAttribute("lijstNamen_van_studenten", lijstNamen_van_studenten);     
+                    
                     gotoPage("menu.jsp",request,response);
                 }
                 
@@ -173,7 +222,10 @@ public class Controller extends HttpServlet {
                             
                             gotoPage("groepsIndeling.jsp",request,response);
                             break;
-                        
+                        case "afmelden":
+                            //session.invalidate();     //Oproepen in de logout.jsp pagina
+                            gotoPage("logout.jsp", request, response);
+                            break;
                         default:
                             break;
                     }
@@ -207,6 +259,83 @@ public class Controller extends HttpServlet {
         }
     }
     
+    public void filterStrings(List<String> studenten, List<String> alleStudenten)
+    {
+        Iterator<String> i = studenten.iterator();
+        Iterator<String> j = alleStudenten.iterator();
+        while(i.hasNext())
+        {
+            String student1 = i.next();
+            while(j.hasNext())
+            {
+                String student2 = j.next();
+                if(student1.equals(student2))
+                {
+                     System.out.println(student1 + " zit al in de lijst");
+                     j.remove();
+                     break;
+                }
+            }
+        }
+    }
+    
+    public List<String> HaalAlleStudentenUitDB(String naamIngelogd)
+    {
+        List<Groepen> lijstIds_van_studenten = mb.getIds_van_studenten();       //Get alle id's van de studenten
+        List<String> lijstNamen_van_studenten = new ArrayList<String>();
+                
+        if(lijstIds_van_studenten.isEmpty()) System.out.println("Lijst studenten is LEEG");    
+        else
+        {
+            System.out.println("Lijst studenten is NIET LEEG");    
+            System.out.println("Lijst: "+ lijstIds_van_studenten);
+            
+            for(int i=0;i<lijstIds_van_studenten.size();i++)            //Get alle namen by id's van tabel gebruikers (enkel studenten).
+            {                                    
+                Groepen gr = lijstIds_van_studenten.get(i);
+                Gebruikers g = gr.getGebruikers();
+                String id2 = g.getGebruikerId();                        //Gebruiker ID ophalen
+                String naam = mb.getVoornaamById(id2) + " " + mb.getAchternaamById(id2);  //Voor-en achternaam ophalen met ID en concatineren
+                if(naam.equals(naamIngelogd)) continue;                 //Persoon zelf moet niet in de lijst zitten
+                lijstNamen_van_studenten.add(naam);                     //Naam toevoegen aan lijst
+            }
+            Collections.sort(lijstNamen_van_studenten);                 //Sorteer namen alfabetisch
+            System.out.println("NAMEN: " + lijstNamen_van_studenten);   //Debug                  
+        }
+        return lijstNamen_van_studenten;
+    }
+    
+    public List<String> HaalAlleNvkUitDB(String gid)
+    {
+        List<String> list_nvk_names = new ArrayList<String>();
+        List<Nietvoorkeur> list_nvk = mb.getNietVoorkeurByGebruikerId(gid);
+        
+        //Get Full name and add to the list
+        if(list_nvk != null)
+        {
+            for(int i=0;i<list_nvk.size();i++){             
+                String nvk_id = list_nvk.get(i).getNvk();
+                list_nvk_names.add(mb.getVoornaamById(nvk_id) + " " + mb.getAchternaamById(nvk_id));
+            }
+        }
+        return list_nvk_names;
+    }
+    
+    public List<String> HaalAlleVkUitDB(String gid)
+    {
+        List<String> list_vk_names = new ArrayList<String>();
+        List<Voorkeur> list_vk = mb.getVoorkeurByGebruikerId(gid);
+        
+        if(list_vk != null)
+        {
+            for(int i=0;i<list_vk.size();i++){
+                String vk_id = list_vk.get(i).getVk();
+                list_vk_names.add(mb.getVoornaamById(vk_id) + " " + mb.getAchternaamById(vk_id));
+            }
+        }
+        return list_vk_names;
+    }
+    
     public List<String> getVoorkeurStudenten(List<Groepsindeling> studentenInGroep)
     {
         List<Voorkeur> voorkeur  = null;
@@ -214,7 +343,7 @@ public class Controller extends HttpServlet {
         for(int i=0; i<studentenInGroep.size(); i++)
         {
             Gebruikers g = studentenInGroep.get(i).getGebruikerId();
-            voorkeur = mb.getVoorkeurStudent(g.getGebruikerId());
+            voorkeur = mb.getVoorkeurByGebruikerId(g.getGebruikerId());
             for(int j=0;j<voorkeur.size();j++)
             {
                 //System.out.println(g.getVoornaam()+" wilt samenzitten met "+mb.getVoornaamById(voorkeur.get(j).getVk()));

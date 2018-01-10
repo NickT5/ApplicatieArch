@@ -10,7 +10,9 @@ import java.util.*;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -70,20 +72,21 @@ public class MainBean implements MainBeanRemote {
         
     }
     
-    @Override
+    /*@Override
     public void hoi()
     {
         
-    }
+    }*/
     
     public List getStudentenInGroep(int nr)
     {
         return em.createNamedQuery("Groepsindeling.findByGroepnummer").setParameter("groepnummer", nr).getResultList();
     }
 
-    public List getVoorkeurStudent(String id)
+    @Override
+    public List getVoorkeurByGebruikerId(String gid)
     {
-        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", id).getResultList();
+        return em.createNamedQuery("Voorkeur.findByGebruikerId").setParameter("gebruikerId", gid ).getResultList();
     }
     
     public void voegGroepToe()
@@ -110,4 +113,67 @@ public class MainBean implements MainBeanRemote {
         }
         return 0;
     }
+
+    @Override
+    public List getNietVoorkeurByGebruikerId(String gid)
+    {
+        return em.createNamedQuery("Nietvoorkeur.findByGebruikerId").setParameter("gebruikerId", gid).getResultList(); 
+    }
+    
+    @Override
+    public String getIdByFullName(String name)
+    {  
+        String[] name_split = name.split(" ",2);
+        //System.out.print("DEBUG voornaam: "+name_split[0]);//DEBUG
+        //System.out.print("DEBUG achternaam: "+name_split[1]);//DEBUG
+        Gebruikers g = (Gebruikers) em.createNamedQuery("Gebruikers.findByFullName").setParameter("voornaam", name_split[0]).setParameter("achternaam", name_split[1]).getSingleResult();
+        return g.getGebruikerId();
+    }
+    
+    @Override
+    public void voegNvkToe(String gid, String nvk)
+    {
+        //Check eerst of de record al bestaat in de DB. Zoniet, voeg het dan toe.
+        boolean bestaat = true;
+        Query q = em.createNamedQuery("Nietvoorkeur.bestaat");
+        q.setParameter("gebruikerId",gid).setParameter("nvk", nvk);
+        try{
+            q.getSingleResult();
+           System.out.print("De record " + gid + " - " + nvk +" bestaat al in de tabel Nietvoorkeur");          //DEBUG
+        }catch(NoResultException e){
+            bestaat = false;
+            System.out.print("De record " + gid + " - " + nvk +" bestaat nog niet in de tabel Nietvoorkeur");   //DEBUG
+        }
+        if(!bestaat)
+        {   //Als het nog niet bestaat, moet je het opslaan in de DB
+            Nietvoorkeur nietvoorkeur = new Nietvoorkeur();
+            nietvoorkeur.setGebruikerId(gid);
+            nietvoorkeur.setNvk(nvk);
+            em.persist(nietvoorkeur);
+        }
+    }
+    
+    @Override
+    public void voegVkToe(String gid, String vk)
+    {
+        //Check eerst of de record al bestaat in de DB. Zoniet, voeg het dan toe.
+        boolean bestaat = true;
+        Query q = em.createNamedQuery("Voorkeur.bestaat");
+        q.setParameter("gebruikerId",gid).setParameter("vk", vk);
+        try{
+           q.getSingleResult();
+           System.out.print("De record " + gid + " - " + vk +" bestaat al in de tabel Voorkeur");          //DEBUG
+        }catch(NoResultException e){
+            bestaat = false;
+            System.out.print("De record " + gid + " - " + vk +" bestaat nog niet in de tabel Voorkeur");   //DEBUG
+        }
+        if(!bestaat)
+        {   //Als het nog niet bestaat, moet je het opslaan in de DB
+            Voorkeur voorkeur = new Voorkeur();
+            voorkeur.setGebruikerId(gid);
+            voorkeur.setVk(vk);
+            em.persist(voorkeur);
+        }
+    }
+    
 }
