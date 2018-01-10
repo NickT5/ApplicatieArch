@@ -38,4 +38,6 @@ public interface MainBeanRemote {
         public void deleteStudentUitGroep(int id);
         public void insertStudentInGroep(String id, int groepnummer);
         public void updateGroepsindeling(String id, int groepnummer);
+        public void deleteNvkByGid(String gid);
+        public void deleteNvkByGidAndNvk(String gid, String nvk);
 }
