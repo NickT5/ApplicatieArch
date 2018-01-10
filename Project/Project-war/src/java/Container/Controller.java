@@ -73,28 +73,6 @@ public class Controller extends HttpServlet {
                     System.out.println("DEBUG: Hiddenfield 'from' != null");
                     switch(request.getParameter("from")){
                         case "Save":
-                            /*//Niet Voorkeur en Voorkeur ophalen uit de request (menu.jsp)
-                            String[] arrayNVK = request.getParameterValues("nietvoorkeur");
-                            String[] arrayVK = request.getParameterValues("voorkeur");
-                            
-                            //Niet voorkeur en Voorkeur toevoegen aan de database
-                            if(arrayNVK != null)
-                            {
-                                for(int i=0;i<arrayNVK.length;i++)
-                                {
-                                    String id_nvk = mb.getIdByFullName(arrayNVK[i]);                //Get ID van student
-                                    System.out.print("NVK naam: "+arrayNVK[i] + " | ID: "+id_nvk);  //DEBUG
-                                    mb.voegNvkToe(id, id_nvk);                                      //Voegtoe aan DB met check of het al bestaat.
-                                }
-                            }
-                            if(arrayVK != null)
-                            {
-                                for(int i=0;i<arrayVK.length;i++){
-                                    String id_vk = mb.getIdByFullName(arrayVK[i]);                 //Get ID van student
-                                    System.out.print("VK naam: "+arrayVK[i] + " | ID: "+id_vk);    //DEBUG
-                                    mb.voegVkToe(id, id_vk);                                       //Voegtoe aan DB met check of het al bestaat.
-                                }
-                            }*/
                             deleteNvkAndVkFromDB(id,request);
                             AddNvkAndVkToDB(id,request);                                            //Get from request, Save to DB
                             setupNvkAndVkNames(id, lijstNamen_van_studenten, request);              //Get from DB, order, filter, add to request
@@ -123,13 +101,48 @@ public class Controller extends HttpServlet {
                     System.out.println("DEBUG: Hiddenfield 'from' == null");
                     //Je komt van login.jsp
                     
-                    setupNvkAndVkNames(id, lijstNamen_van_studenten, request);                      //Get from DB, order, filter, add to request
-                    if(mb.isStudentBevestigt(id).equals("1")){
-                        gotoPage("finaal.jsp",request,response);
+                    int groepNummer = 0;
+                    List<Groepsindeling> g = mb.getGroepen();
+                    for(int i=0;i<g.size();i++)
+                    {
+                        if(g.get(i).getGebruikerId().getGebruikerId().equals(id))
+                        {
+                            groepNummer = g.get(i).getGroepnummer();
+                        }
+                    }
+                    
+                    //System.out.println("DEBUG: gebruiker: " + id + " heeft groepnummer = " + groepNummer);    //DEBUG
+                  
+                    //if(mb.isGroepBevestigt(groepNummer))
+                    if(groepNummer != 0)
+                    {
+                        //System.out.println("DEBUG: student zit in een groep");                                //DEBUG
+                        
+                        List<Groepsindeling> groepsIndeling = mb.getStudentenInGroep(groepNummer);
+                        List<String> studentenInGroep = new ArrayList<String>();
+                        for(int i=0; i<groepsIndeling.size(); i++)
+                        {
+                            String naam = groepsIndeling.get(i).getGebruikerId().getVoornaam()+" "+groepsIndeling.get(i).getGebruikerId().getAchternaam();
+                            studentenInGroep.add(naam);
+                        }
+                              
+                        request.setAttribute("groepnummer", groepNummer);
+                        request.setAttribute("groepstudenten2", studentenInGroep);
+                        gotoPage("overzichtVoorStudent.jsp", request, response);
                     }
                     else{
-                        gotoPage("menu.jsp",request,response);
+                        
+                        System.out.println("DEBUG: groep is NIET bevestigt");
+                        System.out.println("DEBUG: groep is NIET bevestigt");
+                        setupNvkAndVkNames(id, lijstNamen_van_studenten, request);                      //Get from DB, order, filter, add to request
+                        if(mb.isStudentBevestigt(id).equals("1")){
+                            gotoPage("finaal.jsp",request,response);
+                        }
+                        else{
+                            gotoPage("menu.jsp",request,response);
+                        }                   
                     }
+                    
                 }
                 
             }
