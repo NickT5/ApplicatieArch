@@ -176,4 +176,43 @@ public class MainBean implements MainBeanRemote {
         }
     }
     
+    public void deleteStudentUitGroep(int id)
+    {
+        Query q = em.createNamedQuery("Groepsindeling.deleteById");
+        q.setParameter("id", id);
+        q.executeUpdate();
+    }
+    
+    public void insertStudentInGroep(String id, int groepnummer)
+    {
+        Groepsindeling g = new Groepsindeling();
+        Gebruikers gebruikerId = new Gebruikers();
+        
+        gebruikerId = (Gebruikers)em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult(); 
+        
+        g.setGroepnummer(groepnummer);
+        g.setGebruikerId(gebruikerId);
+        
+        try
+        {
+            em.persist(g);
+        }
+        catch(Exception e)
+        {
+               System.out.println("Error tijdens het toevoegen van Groepsindeling: "+e);     
+        }
+    }
+    
+    public void updateGroepsindeling(String id, int groepnummer)
+    {
+        Gebruikers gebruikerId = new Gebruikers();
+        
+        gebruikerId = (Gebruikers)em.createNamedQuery("Gebruikers.findByGebruikerId").setParameter("gebruikerId", id).getSingleResult(); 
+        
+        Query q = em.createNamedQuery("Groepsindeling.updateByGroepnummer");
+        q.setParameter("gebruikerId", gebruikerId);
+        q.setParameter("groepnummer", groepnummer);
+        q.executeUpdate();
+    }
+    
 }
