@@ -9,6 +9,8 @@ CREATE TABLE gebruikers (
         paswoord varchar(20),						
 	voornaam varchar(20),
 	achternaam varchar(20),
+        student_bevestigt varchar(1) DEFAULT '0',
+        groep_bevestigt varchar(1) DEFAULT '0',
 	PRIMARY KEY(gebruiker_id)
 );
 
@@ -43,26 +45,26 @@ CREATE TABLE groepen (
 );
 
 
-INSERT INTO gebruikers VALUES ('1000','1000','Nick','Todts');
-INSERT INTO gebruikers VALUES ('1001','1001','Kevin','Todts');
-INSERT INTO gebruikers VALUES ('1002','1002','Wouter','Symons');
-INSERT INTO gebruikers VALUES ('1003','1003','Jan','Stappers');
-INSERT INTO gebruikers VALUES ('1004','1004','Arno','Van Hoorebeeck');
-INSERT INTO gebruikers VALUES ('1005','1005','Jens','De Gendt');
-INSERT INTO gebruikers VALUES ('1006','1006','Wouter','Van de Wiele');
-INSERT INTO gebruikers VALUES ('1007','1007','Bert','Gadisseur');
-INSERT INTO gebruikers VALUES ('1008','1008','Siebren','Mylle');
-INSERT INTO gebruikers VALUES ('1009','1009','Robin','Maes');
-INSERT INTO gebruikers VALUES ('1010','1010','Jonas','Smet');
-INSERT INTO gebruikers VALUES ('1011','1011','Niels','De Bruyne');
-INSERT INTO gebruikers VALUES ('1012','1012','Michiel','Beke');
-INSERT INTO gebruikers VALUES ('1013','1013','Dave','Bueds');
-INSERT INTO gebruikers VALUES ('1014','1014','Daan','Huyghe');
-INSERT INTO gebruikers VALUES ('1015','1015','Tom','Van Bogaert');
-INSERT INTO gebruikers VALUES ('1016','1016','Steven','De Jonghe');
-INSERT INTO gebruikers VALUES ('1017','1017','Donny','Polfliet');
-INSERT INTO gebruikers VALUES ('9001','9001','Herman','Crauwels');
-INSERT INTO gebruikers VALUES ('9002','9002','Joost','Vennekens');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1000','1000','Nick','Todts');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1001','1001','Kevin','Todts');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1002','1002','Wouter','Symons');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1003','1003','Jan','Stappers');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1004','1004','Arno','Van Hoorebeeck');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1005','1005','Jens','De Gendt');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1006','1006','Wouter','Van de Wiele');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1007','1007','Bert','Gadisseur');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1008','1008','Siebren','Mylle');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1009','1009','Robin','Maes');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1010','1010','Jonas','Smet');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1011','1011','Niels','De Bruyne');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1012','1012','Michiel','Beke');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1013','1013','Dave','Bueds');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1014','1014','Daan','Huyghe');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1015','1015','Tom','Van Bogaert');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1016','1016','Steven','De Jonghe');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('1017','1017','Donny','Polfliet');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('9001','9001','Herman','Crauwels');
+INSERT INTO gebruikers (gebruiker_id,paswoord,voornaam,achternaam) VALUES ('9002','9002','Joost','Vennekens');
 
 INSERT INTO groepen VALUES ('1000','student');
 INSERT INTO groepen VALUES ('1001','student');
