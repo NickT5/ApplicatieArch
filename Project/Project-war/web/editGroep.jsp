@@ -113,13 +113,11 @@
                     <div class="nietvoorkeur">
                         
                     </div>   
-                    <input id="btnSave" class="knop" type="submit" value="Save"/>
-                    <input type="hidden" name="from" value="edit1">
+                    <input class="knop" type="submit" name="from" value="Save"/>
+                    <input class="knop" type="submit" name="from" value="Bevestig"/>
+                    <!--<input type="hidden" name="from" value="edit1">-->
                 </form>
-                <form method="post" action="<c:url value='Controller.do'/>">
-                        <input class="knop" type="submit" value="Bevestig"/>
-                        <input type="hidden" name="from" value="edit2">
-                </form>         
+     
             </div>
             <footer>
                 <jsp:include page="footer.jsp"/>
