@@ -102,6 +102,7 @@ public class Controller extends HttpServlet {
                             gotoPage("menu.jsp",request,response);
                             break;
                         case "Bevestig":
+                            deleteNvkAndVkFromDB(id,request);
                             AddNvkAndVkToDB(id,request);                                            //Get from request, Save to DB
                             setupNvkAndVkNames(id, lijstNamen_van_studenten, request);              //Get from DB, order, filter, add to request
                             mb.updateStudentBevestigt(id);                      //Set studentBevestigt op true ('1') voor de ingelogde gebruiker
@@ -464,8 +465,8 @@ public class Controller extends HttpServlet {
     
     public void deleteNvkAndVkFromDB(String id, HttpServletRequest request)
     {
-        //TODO
-        boolean gevonden = false; 
+        boolean gevonden = false;       //Voor NVK (Niet Voorkeur)
+        boolean gevonden2 = false;      //Voor VK  (Voorkeur)
         
         String[] arrayNVK = request.getParameterValues("nietvoorkeur");
         String[] arrayVK = request.getParameterValues("voorkeur");
@@ -473,10 +474,7 @@ public class Controller extends HttpServlet {
         //Get alle Voorkeur en nietvoorkeur id's uit de DB voor de ingelogde gebruiker id 
         List<String> list_nvk_names = HaalAlleNvkUitDB(id);
         List<String> list_vk_names = HaalAlleVkUitDB(id);
-        
-            System.out.println("DEBUGGGGGGGG van DB "+list_nvk_names);
-            
-            
+                    
         if(arrayNVK == null)
         {       
             mb.deleteNvkByGid(id);                  //Verwijder alles uit de NVK tabel
@@ -503,6 +501,36 @@ public class Controller extends HttpServlet {
                     //Student verwijderen uit database
                     System.out.println(list_nvk_names.get(i)+" moet gedelete worden.");
                     mb.deleteNvkByGidAndNvk(id, mb.getIdByFullName(list_nvk_names.get(i)));
+                }
+            }
+        }
+              
+        if(arrayVK == null)
+        {       
+            mb.deleteVkByGid(id);                  //Verwijder alles uit de VK tabel
+        }
+        else{
+            //Vergelijk lijst v/d request met lijst uit de DB  voor NVK         
+            for(int i=0; i<list_vk_names.size(); i++)
+            {
+                for(int j=0;j<arrayVK.length;j++)
+                {
+                    System.out.println(list_vk_names.get(i) + " vergelijken met " +arrayVK[j]);
+                    if(arrayVK[j].equals(list_vk_names.get(i)))
+                    {
+                        gevonden2=true;
+                        break;
+                    }
+                    else
+                    {
+                        gevonden2=false;
+                    }
+                }
+                if(!gevonden2)
+                {
+                    //Student verwijderen uit database
+                    System.out.println(list_vk_names.get(i)+" moet gedelete worden.");
+                    mb.deleteVkByGidAndVk(id, mb.getIdByFullName(list_vk_names.get(i)));
                 }
             }
         }
