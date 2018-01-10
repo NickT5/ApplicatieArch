@@ -70,7 +70,7 @@
     <body>
         <div class="edit-page">
             <div class="form">
-                <h1>Groep ${groepnummer}</h1>
+                <h1 name="Groep">Groep ${groepnummer}</h1>
                 <form method="get" action="<c:url value='Controller.do'/>">
                     <section class="container">
                         <div>
