@@ -149,8 +149,17 @@ public class Controller extends HttpServlet {
                                 List<Groepsindeling> studentenInGroep = mb.getStudentenInGroep(groepNummer);
                                 List<String> studentenVoorkeur = getVoorkeurStudenten(studentenInGroep);
                                 List<Groepen> alleStudenten = mb.getIds_van_studenten();
+                                
+                                System.out.println("VOOR "+studentenInGroep);
+                                System.out.println("VOOR "+alleStudenten);
+                                
                                 filterStudenten(studentenInGroep, alleStudenten);
+                                
+                                System.out.println("NA "+studentenInGroep);
+                                System.out.println("NA "+alleStudenten);
                             
+
+                                
                                 session.setAttribute("studentenVoorkeur", studentenVoorkeur);
                                 session.setAttribute("studentenInGroep", studentenInGroep);
                                 session.setAttribute("groepnummer", groepNummer);
@@ -180,12 +189,35 @@ public class Controller extends HttpServlet {
                         case"edit1":
                             System.out.println("DEBUG: 'from' edit1 naar groepsIndeling");
                             String[] groepstudenten = request.getParameterValues("studentenInGroep");
+                            groepNummer = (int)session.getAttribute("groepnummer");
+                            System.out.println("DEBUG: groepnummer is"+groepNummer);                            
                             
-                            if(groepstudenten == null)  System.out.println("ERROR is null");
+                            List<Groepsindeling> studentenInGroepInDb = (List<Groepsindeling>)session.getAttribute("studentenInGroep");
+                            System.out.println("DEBUG: studentenInGroepInDb is"+studentenInGroepInDb); 
                             
-                            for (String groepstudenten1 : groepstudenten) {
-                                System.out.println(groepstudenten1);
+                            if(studentenInGroepInDb==null)
+                            {
+                                //Oorspronkelijk een lege lijst in database. Wss een nieuwe groep aangemaakt
+                                insertStudentenInGroep(groepstudenten,groepNummer);
                             }
+                            else
+                            {
+                                checkForDeleteStudentInGroep(studentenInGroepInDb,groepstudenten);
+                                checkForInsertStudentInGroep(studentenInGroepInDb,groepstudenten);
+                            }
+
+                           
+                            if(groepstudenten != null)
+                            {
+                                for (String studentNaam : groepstudenten)
+                                {
+                                    System.out.println(studentNaam);
+                                    String studentId = mb.getIdByFullName(studentNaam);
+                                    
+                                }
+                            }
+                            
+
                             
                             gotoPage("groepsIndeling.jsp",request,response);
                             break;
@@ -206,6 +238,74 @@ public class Controller extends HttpServlet {
         }
     }
     
+    public void insertStudentenInGroep(String[] studenten, int groepnummer)
+    {
+        //Eerst updaten om een NULL waarde te overschrijven en de rest inserten
+        mb.updateGroepsindeling(mb.getIdByFullName(studenten[0]), groepnummer);
+        
+        for(int i=1; i< studenten.length; i++)
+        {
+            mb.insertStudentInGroep(mb.getIdByFullName(studenten[i]), groepnummer);
+        }
+    }
+    
+    public void checkForInsertStudentInGroep(List<Groepsindeling> studentenInDatabase, String[] studenten)
+    {
+        boolean gevonden = false;
+        int groepnummer = studentenInDatabase.get(0).getGroepnummer();
+        System.out.println("DEBUG: Insert moet geburen in groep "+groepnummer);
+        for(int i=0; i<studenten.length; i++)
+        {
+            for(int j=0; j<studentenInDatabase.size(); j++)
+            {
+                if(mb.getIdByFullName(studenten[i]).equals(studentenInDatabase.get(j).getGebruikerId().getGebruikerId()))  
+                {
+                    System.out.println(studentenInDatabase.get(j).getGebruikerId().getVoornaam()+" gevonden in lijst");
+                    gevonden = true;
+                    break;
+                }
+                else
+                {
+                    gevonden = false;
+                }
+            }
+            if(!gevonden)
+            {
+                //Studenten Inserten in database
+                System.out.println(studenten[i]+" zit niet in de lijst. Dus Insert met id gelijk aan "+mb.getIdByFullName(studenten[i]));
+                mb.insertStudentInGroep(mb.getIdByFullName(studenten[i]), groepnummer);
+            }
+        }
+    }
+    
+    public void checkForDeleteStudentInGroep(List<Groepsindeling> studentenInDatabase, String[] studenten)
+    {
+        boolean gevonden = false;     
+        for(int i=0; i<studentenInDatabase.size(); i++)
+        {
+            //System.out.println("student "+studentenInDatabase.get(i).getGebruikerId().getVoornaam()+" met id nummer "+studentenInDatabase.get(i).getGebruikerId().getGebruikerId());
+            for(int j=0;j<studenten.length;j++)
+            {
+                if(studentenInDatabase.get(i).getGebruikerId().getGebruikerId().equals(mb.getIdByFullName(studenten[j])))
+                {
+                    System.out.println(studentenInDatabase.get(i).getGebruikerId().getVoornaam()+" gevonden in lijst");
+                    gevonden=true;
+                    break;
+                }
+                else
+                {
+                    gevonden = false;
+                }
+            }
+            if(!gevonden)
+            {
+                //Student verwijderen uit database
+                System.out.println(studentenInDatabase.get(i).getGebruikerId().getVoornaam()+" zit niet in de lijst. Dus delete met id gelijk aan "+studentenInDatabase.get(i).getId());
+                mb.deleteStudentUitGroep(studentenInDatabase.get(i).getId());
+            }
+        }
+    }
+    
     public void filterStudenten(List<Groepsindeling> studenten, List<Groepen> alleStudenten)
     {
         Iterator<Groepsindeling> i = studenten.iterator();
@@ -216,10 +316,12 @@ public class Controller extends HttpServlet {
             while(j.hasNext())
             {
                 Groepen student2 = j.next();
+                System.out.println(student1.getGebruikerId().getGebruikerId()+" vergelijken met "+student2.getId());
                 if(student1.getGebruikerId().getGebruikerId().equals(student2.getId()))
                 {
                      System.out.println(student1.getGebruikerId().getVoornaam()+" zit al in de lijst");
                      j.remove();
+                     j = alleStudenten.iterator();//reset iterator omdat je terug van in het begin van de lijst moet vergelijken
                      break;
                 }
             }

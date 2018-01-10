@@ -31,7 +31,11 @@ public interface MainBeanRemote {
         public String getIdByFullName(String name);
         public void voegNvkToe(String gid, String nvk);
         public void voegVkToe(String gid, String vk);
+
         public void updateStudentBevestigt(String gid);
         public String isStudentBevestigt(String gid);
        
+        public void deleteStudentUitGroep(int id);
+        public void insertStudentInGroep(String id, int groepnummer);
+        public void updateGroepsindeling(String id, int groepnummer);
 }

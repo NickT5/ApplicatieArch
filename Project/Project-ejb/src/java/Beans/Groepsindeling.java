@@ -28,6 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Groepsindeling.findAll", query = "SELECT g FROM Groepsindeling g")
+    , @NamedQuery(name = "Groepsindeling.deleteById", query = "DELETE FROM Groepsindeling g WHERE g.id = :id")
+    , @NamedQuery(name = "Groepsindeling.updateByGroepnummer", query = "UPDATE Groepsindeling g SET g.gebruikerId = :gebruikerId WHERE g.groepnummer = :groepnummer")
     , @NamedQuery(name = "Groepsindeling.aantalGroepen", query = "SELECT g.groepnummer FROM Groepsindeling g GROUP BY g.groepnummer")
     , @NamedQuery(name = "Groepsindeling.findLastGroepnummer", query = "SELECT max(g.groepnummer) FROM Groepsindeling g")
     , @NamedQuery(name = "Groepsindeling.findById", query = "SELECT g FROM Groepsindeling g WHERE g.id = :id")
